@@ -19,10 +19,14 @@ nlp = stanza.Pipeline(lang='pt', processors='tokenize,mwt,pos,lemma,depparse')
 
 
 class Projeto:
+    def __init__(self, f):
+        self.frase = f
+        self.conhecimentoMaster = []
 
 
+    def ImprimirConhecimento(self):
+        conhecimento = self.conhecimentoMaster
 
-    def ImprimirConhecimento(self,conhecimento):
         for palavra in conhecimento:
             print("Palavra: ", palavra.palavra.text, "-", palavra.palavra.i, "-", palavra.palavra.pos_)
 
@@ -42,7 +46,7 @@ class Projeto:
             print("\n")
 
 
-    def RemoverPontuacao(self,texto):
+    def _RemoverPontuacao(self,texto):
         Contador = 0
 
         Frase_Filtrada = []
@@ -61,7 +65,7 @@ class Projeto:
         return textoFiltrado
 
 
-    def TratarTag(self,texto):
+    def _TratarTag(self,texto):
         listaDeTags = []
         tagSplit = texto.split("|")
 
@@ -76,14 +80,14 @@ class Projeto:
             tagMaster = tag.split("=")
 
             for tagM in tagMaster:
-                tagDefinitiva.append(self.RemoverPontuacao(tagM))
+                tagDefinitiva.append(self._RemoverPontuacao(tagM))
 
             listaDeTags.append(tagDefinitiva)
 
         return listaDeTags
 
 
-    def ExtrairConhecimento(self,frase):
+    def _ExtrairConhecimento(self,frase):
         vemAntes = 0
 
         passou = 0
@@ -238,7 +242,7 @@ class Projeto:
         return listaDePalavras
 
 
-    def RecalibarConhecimento(self,fraseTeste4, conhecimento):
+    def _RecalibarConhecimento(self,fraseTeste4, conhecimento):
         verbos = 0
 
         listaDePalavras = ""
@@ -383,7 +387,7 @@ class Projeto:
         return conhecimento
 
 
-    def RemoverLigacoes(self,con):
+    def _RemoverLigacoes(self,con):
         ListaDeVerbos = []
 
         for conhecimento in con:
@@ -398,8 +402,10 @@ class Projeto:
                             if verbo.substantivoPrincipal[0].i != palavra.substantivoPrincipal[0].i:
                                 verbo.verbos.remove(D_verbo)
 
+        return con
 
-    def AjustarCases(self,con):
+
+    def _AjustarCases(self,con):
         for objeto in con:
             if objeto.palavra.pos_ == "N" or objeto.palavra.pos_ == "NPROP" or objeto.palavra.pos_ == "PROADJ" or objeto.palavra.pos_ == "PRO-KS" or objeto.palavra.pos_ == "PROPESS" or objeto.palavra.pos_ == "PRO-KS-REL" or objeto.palavra.pos_ == "PROSUB":
 
@@ -415,8 +421,9 @@ class Projeto:
                                 palavra.substantivo.append(objeto2.palavra)
                                 con.append(palavra)
 
+        return con
 
-    def RemoverCasesDuplicados(self,con):
+    def _RemoverCasesDuplicados(self, con):
         for conhecimento in con:
             if conhecimento.palavra.dep_ == "case":
 
@@ -460,8 +467,11 @@ class Projeto:
 
                                                     con.remove(conhecimento)
 
+        return con
 
-    def SubstituirPOS(self,frase):
+
+
+    def _SubstituirPOS(self,frase):
         fraseSpacy = nlpPor(frase)
         fraseNlpNet = tagger.tag(frase)
 
@@ -473,7 +483,7 @@ class Projeto:
             tokenAuxiliar = Classes.TokenAux(tokenSpacy.text)
             tokenAuxiliar.i = tokenSpacy.i
             tokenAuxiliar.dep_ = tokenSpacy.dep_
-            tokenAuxiliar.tag_.append(self.TratarTag(str(tokenSpacy.tag_)))
+            tokenAuxiliar.tag_.append(self._TratarTag(str(tokenSpacy.tag_)))
 
             ListaDeTokensAuxiliares.append(tokenAuxiliar)
 
@@ -498,7 +508,7 @@ class Projeto:
                                 childAux.pos_ = childrenEmTokensAuxiliares.pos_
                                 childAux.i = children.i
                                 childAux.dep_ = children.dep_
-                                childAux.tag_.append(self.TratarTag(str(children.tag_)))
+                                childAux.tag_.append(self._TratarTag(str(children.tag_)))
                                 tokenAux.filhos.append(childAux)
 
                     break
@@ -508,7 +518,7 @@ class Projeto:
         return ListaDeTokensDefinitiva
 
 
-    def StanfordDependencyParsing(self,frase):
+    def _StanfordDependencyParsing(self,frase):
         listaDePalavras = []
         filhos = []
         palavrasQueJaPassaram = []
@@ -550,7 +560,7 @@ class Projeto:
         return listaDePalavras
 
 
-    def MesclarDependencias(self,ListaSpacy, ListaStanford):
+    def _MesclarDependencias(self,ListaSpacy, ListaStanford):
         existe = 0
 
         for stanford in ListaStanford:
@@ -580,7 +590,7 @@ class Projeto:
         return ListaSpacy
 
 
-    def ConverterTokenEmEntidade(self,frase, ListaDeTokens):
+    def _ConverterTokenEmEntidade(self,frase, ListaDeTokens):
         for ent in nlpPor(frase).ents:
 
             primeiro = 0
@@ -635,37 +645,43 @@ class Projeto:
 
                 primeiro = 0
 
+        return ListaDeTokens
 
-    def RemoverPontuacoes(self,ListaDeTokens):
+
+    def _RemoverPontuacoes(self,ListaDeTokens):
         for token in ListaDeTokens:
             for filho in token.filhos:
                 if filho.pos_ == "PU":
                     token.filhos.remove(filho)
 
+        return ListaDeTokens
 
-    def ConhecimentoCalibrado(self,frase):
-        ListaDeTokensDefinitiva = self.SubstituirPOS(frase)
+    def ConhecimentoCalibrado(self):
 
-        ListaDeTokensStanford = self.StanfordDependencyParsing(frase)
+        frase = self.frase
 
-        ListaFinal = self.MesclarDependencias(ListaDeTokensDefinitiva, ListaDeTokensStanford)
+        ListaDeTokensDefinitiva = self._SubstituirPOS(frase)
 
-        self.RemoverPontuacoes(ListaFinal)
+        ListaDeTokensStanford = self._StanfordDependencyParsing(frase)
 
-        self.ConverterTokenEmEntidade(frase, ListaFinal)
+        ListaFinal = self._MesclarDependencias(ListaDeTokensDefinitiva, ListaDeTokensStanford)
 
-        con = self.ExtrairConhecimento(ListaFinal)
+        ListaFinal = self._RemoverPontuacoes(ListaFinal)
 
-        self.RemoverLigacoes(con)
+        ListaFinal = self._ConverterTokenEmEntidade(frase, ListaFinal)
 
-        self.AjustarCases(con)
+        con = self._ExtrairConhecimento(ListaFinal)
 
-        self.RemoverCasesDuplicados(con)
+        con = self._RemoverLigacoes(con)
 
-        return con
+        con = self._AjustarCases(con)
+
+        con = self._RemoverCasesDuplicados(con)
+
+        self.conhecimentoMaster = con
 
 
-    def AdicionarNosNoGrafo(self,conhecimento, G):
+    def _AdicionarNosNoGrafo(self,conhecimento, G):
         for objeto in conhecimento:
             txt = objeto.palavra.text + "_" + str(objeto.palavra.i)
             G.add_node(txt, pos=objeto.palavra.pos_, dep=objeto.palavra.dep_)
@@ -693,7 +709,7 @@ class Projeto:
         return G
 
 
-    def AdicionarLigacoesNoGrafo(self,conhecimento, G):
+    def _AdicionarLigacoesNoGrafo(self,conhecimento, G):
         for objeto in conhecimento:
             if objeto.palavra.pos_ == "V" or objeto.palavra.pos_ == "VAUX" or objeto.palavra.pos_ == "PCP":
 
@@ -776,10 +792,13 @@ class Projeto:
         return G
 
 
-    def ImprimirGrafo(self,con):
+    def ImprimirGrafo(self):
+
+        con = self.conhecimentoMaster
+
         G = nx.Graph()
-        G = self.AdicionarNosNoGrafo(con, G)
-        G = self.AdicionarLigacoesNoGrafo(con, G)
+        G = self._AdicionarNosNoGrafo(con, G)
+        G = self._AdicionarLigacoesNoGrafo(con, G)
 
         print(list(G.edges))
         pos = nx.spring_layout(G)
@@ -825,7 +844,7 @@ class Projeto:
         plt.show()
 
 
-    def ListarSinonimos(palavra, cursor):
+    def _ListarSinonimos(palavra, cursor):
         listaDeSinonimos = []
 
         query = "select * from wordnetbr.synsets where unidade = '" + str(palavra) + "'"

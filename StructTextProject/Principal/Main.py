@@ -25,9 +25,9 @@ entidades = "Salvador Dalí i Domènech, foi o 1º Marquês de Dalí de Púbol, 
 adjetivo = "Marcelo é bonito e muito gentil, ontem ele não pode ir ao jogo de futebol mas ficou em casa. Marcos um rapaz muito prestativo estudou matemática"
 
 
-projeto = Projeto()
+projeto = Projeto(f2)
 
-con = projeto.ConhecimentoCalibrado(f3)
+con = projeto.ConhecimentoCalibrado()
 
-projeto.ImprimirConhecimento(con)
+projeto.ImprimirGrafo()
 
