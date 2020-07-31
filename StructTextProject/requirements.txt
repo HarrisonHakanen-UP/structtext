@@ -1,0 +1,6 @@
+nlpnet
+stanza
+spacy
+torch == 1.5.0
+networkx
+matplotlib
