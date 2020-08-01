@@ -440,14 +440,26 @@ class Projeto:
                                         case.substantivo[
                                             0].text:
 
-                                    for palavra in con:
 
-                                        if palavra.palavra.pos_ == "V" or palavra.palavra.pos_ == "VAUX":
+                                    voltar = 0
 
-                                            for sub in palavra.substantivoPrincipal:
+                                    for Index_palavra in range(len(con)):
+
+                                        if Index_palavra == len(con):
+                                            break
+
+                                        for v in range(voltar):
+                                            Index_palavra -=1
+                                            voltar-=1
+
+                                        print(con[Index_palavra].palavra.text)
+                                        if con[Index_palavra].palavra.pos_ == "V" or con[Index_palavra].palavra.pos_ == "VAUX":
+
+
+                                            for sub in con[Index_palavra].substantivoPrincipal:
 
                                                 if sub.i == conhecimento.substantivoPrincipal[0].i:
-                                                    palavra.substantivoPrincipal[0] = case.substantivoPrincipal[0]
+                                                    con[Index_palavra].substantivoPrincipal[0] = case.substantivoPrincipal[0]
 
                                                     for substantivoPrincipal in conhecimento.substantivoPrincipal:
 
@@ -455,6 +467,7 @@ class Projeto:
 
                                                             if substantivoPrincipal.i == conhecimento2.palavra.i:
                                                                 con.remove(conhecimento2)
+                                                                voltar+=1
                                                                 break
 
                                                     for substantivo in conhecimento.substantivo:
@@ -463,9 +476,12 @@ class Projeto:
 
                                                             if substantivo.i == conhecimento2.palavra.i:
                                                                 con.remove(conhecimento2)
+                                                                voltar+=1
                                                                 break
 
-                                                    con.remove(conhecimento)
+                                                    if voltar != 0:
+                                                        con.remove(conhecimento)
+
 
         return con
 
