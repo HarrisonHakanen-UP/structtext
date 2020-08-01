@@ -1,7 +1,6 @@
 
-
-import spacy
-nlp = spacy.load("pt_core_news_lg")
+import stanza
+stanza.download('pt')
 
 '''
 No console digitar o seguinte comando:
