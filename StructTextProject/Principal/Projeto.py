@@ -1,6 +1,9 @@
 '''Spacy'''
 import spacy
 import string
+
+from pyparsing import LineStart
+
 nlpPor = spacy.load("pt_core_news_lg")
 from Model import Classes
 import networkx as nx
@@ -607,6 +610,8 @@ class Projeto:
 
 
     def _ConverterTokenEmEntidade(self,frase, ListaDeTokens):
+
+        listaDeId = []
         for ent in nlpPor(frase).ents:
 
             primeiro = 0
@@ -623,43 +628,51 @@ class Projeto:
                     for token in ListaDeTokens:
 
                         if entSplit == token.text:
+                            if token.i not in listaDeId:
 
-                            if primeiro == 0:
-                                entidade.tag_.append(token.tag_)
-                                entidade.pos_ = token.pos_
-                                entidade.i = token.i
-                                primeiro = 1
+                                if primeiro == 0:
+                                    entidade.tag_.append(token.tag_)
+                                    entidade.pos_ = token.pos_
+                                    entidade.i = token.i
+                                    primeiro = 1
 
-                            for filho in token.filhos:
+                                for filho in token.filhos:
 
-                                igual = 0
+                                    igual = 0
 
-                                for entSplit2 in entidadeSplit:
+                                    for entSplit2 in entidadeSplit:
 
-                                    if filho.text == entSplit2:
-                                        igual = 1
-                                        break
+                                        if filho.text == entSplit2:
+                                            igual = 1
+                                            break
 
-                                if igual != 1:
-                                    entidade.filhos.append(filho)
+                                    if igual != 1:
+                                        entidade.filhos.append(filho)
 
-                                igual = 0
+                                    igual = 0
 
-                            for token2 in ListaDeTokens:
+                                for token2 in ListaDeTokens:
 
-                                for filho2 in token2.filhos:
+                                    for filho2 in token2.filhos:
 
-                                    if filho2.i == token.i:
-                                        token2.filhos.append(entidade)
-                                        token2.filhos.remove(filho2)
+                                        if filho2.i == token.i:
+                                            token2.filhos.append(entidade)
+                                            token2.filhos.remove(filho2)
 
-                            ListaDeTokens.remove(token)
-
-                            break
+                                ListaDeTokens.remove(token)
+                                listaDeId.append(token.i)
+                                break
 
                 ListaDeTokens.append(entidade)
 
                 primeiro = 0
+
+            else:
+
+                for token in ListaDeTokens:
+                    if token.text == entidadeSplit[0]:
+                        listaDeId.append(token.i)
+                        break
 
         return ListaDeTokens
 

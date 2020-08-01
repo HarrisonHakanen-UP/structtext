@@ -5,7 +5,7 @@ frase1 = "Uma mulher foi atropelada por um carro enquanto atravessava a rua"
 frase2 = "Um carro atroupelou uma mulher que atravessava uma rua, então o carro fugiu do local"
 frase3 = "Ao atravessar uma rua a mulher foi atropelada por um carro"
 frase4 = "Ontem minha mãe estudou tanto até ficar cansada. Eu lavei a louça então ela me agradeceu."
-fraseTeste= "Ontem o cachorro do Jeferson brincou de enterrar o osso enquanto o cachorro de Maria corria pelo parque"
+fraseTeste= "Ontem o cachorro do Jeferson brincou de enterrar o osso enquanto o cachorro de Maria corria pelo parque, então o cachorro do Jeferson ficou cansado"
 fraseTeste2= "Ontem o cachorro do Jeferson brincou de enterrar o osso, então o cachorro ficou parado"
 fraseTeste3 = "Maria embora não tivesse tempo, comprou um cachorro"
 fraseTeste4 = "Quando chegou das férias, Maria que gosta muito de animais, embora não tivesse dinheiro, adquiriu, escondendo do marido, um cachorro"
@@ -25,9 +25,11 @@ entidades = "Salvador Dalí i Domènech, foi o 1º Marquês de Dalí de Púbol, 
 adjetivo = "Marcelo é bonito e muito gentil, ontem ele não pode ir ao jogo de futebol mas ficou em casa. Marcos um rapaz muito prestativo estudou matemática"
 
 
-projeto = Projeto(f2)
+projeto = Projeto(f3)
 
 con = projeto.ConhecimentoCalibrado()
 
 projeto.ImprimirGrafo()
+
+projeto.ImprimirConhecimento()
 
