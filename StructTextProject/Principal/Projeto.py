@@ -533,7 +533,6 @@ class Projeto:
                     break
 
             ListaDeTokensDefinitiva.append(tokenAux)
-
         return ListaDeTokensDefinitiva
 
 
@@ -569,7 +568,7 @@ class Projeto:
                                 word2.head - 1].text and sent.words[word.head - 1].id == sent2.words[word2.head - 1].id:
                                 filhoAux = Classes.TokenAux(word2.text)
                                 filhoAux.i = int(word2.id) - 1
-
+                                '''Arrumar para que os filhos também tenham tagger e pos'''
                                 palavra.filhos.append(filhoAux)
 
                     palavrasQueJaPassaram.append(sent.words[word.head - 1].text + sent.words[word.head - 1].id)
@@ -871,29 +870,3 @@ class Projeto:
 
         plt.axis('off')
         plt.show()
-
-
-    def _ListarSinonimos(palavra, cursor):
-        listaDeSinonimos = []
-
-        query = "select * from wordnetbr.synsets where unidade = '" + str(palavra) + "'"
-        try:
-            cursor.execute(query)
-            records = cursor.fetchall()
-
-            for record in records:
-                query2 = "select * from wordnetbr.synsets where id = " + record[2]
-
-                try:
-                    cursor.execute(query2)
-                    records2 = cursor.fetchall()
-
-                    for rec in records2:
-                        listaDeSinonimos.append(rec)
-                except:
-                    print("An exception occurred")
-
-        except Exception as e:
-            print(e)
-
-        return listaDeSinonimos
