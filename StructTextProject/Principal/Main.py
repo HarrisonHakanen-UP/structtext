@@ -27,7 +27,7 @@ adjetivo = "Marcelo é bonito e muito gentil, ontem ele não pode ir ao jogo de 
 
 projeto = Projeto(f3)
 
-con = projeto.ConhecimentoCalibrado()
+projeto.ConhecimentoCalibrado()
 
 projeto.ImprimirGrafo()
 
