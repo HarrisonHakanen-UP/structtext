@@ -535,6 +535,53 @@ class Projeto:
             ListaDeTokensDefinitiva.append(tokenAux)
         return ListaDeTokensDefinitiva
 
+    def _CompletarPOS_NER(self,filho,frase):
+        spacyTokens = nlpPor(frase)
+        tokenF = []
+        tokenT = []
+        contF = 0
+        contT = 0
+
+
+        for token in spacyTokens:
+            if token.i == filho.i:
+
+                if token.text == filho.text:
+
+                    filho.pos_ = token.pos_
+                    filho.dep_ = token.dep_
+                    filho.lemma_ = token.lemma_
+                    filho.tag_ = token.tag_
+                    break
+
+                else:
+                    for tokenFrente in range(len(spacyTokens)):
+                        if spacyTokens[tokenFrente].text == filho.text:
+                            tokenF.append(spacyTokens[tokenFrente])
+                            break
+                        contF += 1
+
+                    for tokenTras in range(len(spacyTokens)):
+                        if spacyTokens[-(tokenTras+1)].text == filho.text:
+                            tokenT.append(spacyTokens[-(tokenTras+1)])
+                            break
+                        contT +=1
+
+
+                    if contF<contT and contF != 0:
+                        filho.i = tokenF[0].i
+                        filho.pos_ = tokenF[0].pos_
+                        filho.dep_ = tokenF[0].dep_
+                        filho.lemma_ = tokenF[0].lemma_
+                        filho.tag_ = tokenF[0].tag_
+
+                    if contT < contF and contT != 0:
+                        filho.i = tokenT[0].i
+                        filho.pos_ = tokenT[0].pos_
+                        filho.dep_ = tokenT[0].dep_
+                        filho.lemma_ = tokenT[0].lemma_
+                        filho.tag_ = tokenT[0].tag_
+
 
     def _StanfordDependencyParsing(self,frase):
         listaDePalavras = []
@@ -555,6 +602,9 @@ class Projeto:
 
                     filhoAux = Classes.TokenAux(word.text)
                     filhoAux.i = int(word.id) - 1
+                    '''Arrumar para que os filhos também tenham tagger e pos'''
+
+
                     palavra.filhos.append(filhoAux)
 
                     palavra.i = int(sent.words[word.head - 1].id) - 1
@@ -566,10 +616,13 @@ class Projeto:
 
                             if word.id != word2.id and sent.words[word.head - 1].text == sent2.words[
                                 word2.head - 1].text and sent.words[word.head - 1].id == sent2.words[word2.head - 1].id:
-                                filhoAux = Classes.TokenAux(word2.text)
-                                filhoAux.i = int(word2.id) - 1
+                                filhoAux2 = Classes.TokenAux(word2.text)
+                                filhoAux2.i = int(word2.id) - 1
                                 '''Arrumar para que os filhos também tenham tagger e pos'''
-                                palavra.filhos.append(filhoAux)
+
+                                self._CompletarPOS_NER(filhoAux2,frase)
+
+                                palavra.filhos.append(filhoAux2)
 
                     palavrasQueJaPassaram.append(sent.words[word.head - 1].text + sent.words[word.head - 1].id)
 
@@ -691,6 +744,19 @@ class Projeto:
         ListaDeTokensDefinitiva = self._SubstituirPOS(frase)
 
         ListaDeTokensStanford = self._StanfordDependencyParsing(frase)
+
+
+        '''
+        doc = nlp(frase)
+        print(*[f'id: {word.id:{5}}\tword: {word.text:{10}}\thead id: {word.head:{5}}\thead: {sent.words[word.head - 1].text if word.head > 0 else "root":{10}}'for sent in doc.sentences for word in sent.words], sep='\n')
+        print("\n")
+        print("\n")
+
+        for palavra in ListaDeTokensStanford:
+            print("Palavra: ",palavra.text)
+            print(f"{'Filhos: : '}{[substanP.text for substanP in palavra.filhos]}")
+            print("\n")
+        '''
 
         ListaFinal = self._MesclarDependencias(ListaDeTokensDefinitiva, ListaDeTokensStanford)
 
