@@ -17,6 +17,7 @@ class Comparacao:
         self.con = con
         self.con2 = con2
         self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s100.txt', binary=False)
+        self.Comparacao = self._CompararConhecimentos()
 
     def most_similar(positive, negative, model):
         table_list_template = """
@@ -42,13 +43,13 @@ class Comparacao:
     def _ListarSinonimos(palavra, cursor):
         listaDeSinonimos = []
 
-        query = "select * from wordnetbr.synsets where unidade = '" + str(palavra) + "'"
+        query = "select * from WordNet_WordNetBr.synsets where unidade = '" + str(palavra) + "'"
         try:
             cursor.execute(query)
             records = cursor.fetchall()
 
             for record in records:
-                query2 = "select * from wordnetbr.synsets where id = " + record[2]
+                query2 = "select * from WordNet_WordNetBr.synsets where id = " + record[2]
 
                 try:
                     cursor.execute(query2)
@@ -65,12 +66,15 @@ class Comparacao:
         return listaDeSinonimos
 
 
-    def CompararConhecimentos(self,con,con2):
+    def _CompararConhecimentos(self):
+        con = self.con
+        con2 = self.con2
 
         db = mysql.connect(
             host="localhost",
             user="root",
-            database="wordnetbr"
+            password="Eunaosei1997",
+            database="WordNet_WordNetBr"
         )
 
         cursor = db.cursor()
@@ -230,4 +234,4 @@ class Comparacao:
 
                             continua = 0
 
-            listaDeSinonimos = []
+        return listaDeVerbos

@@ -1,4 +1,5 @@
 from Principal.Projeto import Projeto
+from Principal.Comparacao import Comparacao
 
 
 frase1 = "Uma mulher foi atropelada por um carro enquanto atravessava a rua"
@@ -24,12 +25,24 @@ entidades = "Salvador Dalí i Domènech, foi o 1º Marquês de Dalí de Púbol, 
 
 adjetivo = "Marcelo é bonito e muito gentil, ontem ele não pode ir ao jogo de futebol mas ficou em casa. Marcos um rapaz muito prestativo estudou matemática"
 
+conhecimento1 = Projeto(frase1)
+conhecimento2 = Projeto(frase3)
 
-projeto = Projeto(f3)
+Comp = Comparacao(conhecimento1,conhecimento2)
 
-projeto.ConhecimentoCalibrado()
 
-projeto.ImprimirGrafo()
 
-projeto.ImprimirConhecimento()
+#projeto.ConhecimentoCalibrado()
+
+#projeto.ImprimirGrafo()
+
+#projeto.ImprimirConhecimento()
+
+
+
+
+
+#frase3 não fazendo ligações corretas.
+#fraseTeste2 e f3 está duplicando colocando "Jeferson" como um não substantivo ou pronome...sei la pq
+#fraseTeste3 Maria e comprou aparecem como relações não catalogadas pelos grafos (deve ser algo quando se criam os nós do grafo)
 

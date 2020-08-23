@@ -24,7 +24,10 @@ nlp = stanza.Pipeline(lang='pt', processors='tokenize,mwt,pos,lemma,depparse')
 class Projeto:
     def __init__(self, f):
         self.frase = f
-        self.conhecimentoMaster = []
+        self.conhecimentoMaster = self._ConhecimentoCalibrado()
+
+    def RetornarConhecimento(self):
+        return self.conhecimentoMaster
 
 
     def ImprimirConhecimento(self):
@@ -737,26 +740,13 @@ class Projeto:
 
         return ListaDeTokens
 
-    def ConhecimentoCalibrado(self):
+    def _ConhecimentoCalibrado(self):
 
         frase = self.frase
 
         ListaDeTokensDefinitiva = self._SubstituirPOS(frase)
 
         ListaDeTokensStanford = self._StanfordDependencyParsing(frase)
-
-
-        '''
-        doc = nlp(frase)
-        print(*[f'id: {word.id:{5}}\tword: {word.text:{10}}\thead id: {word.head:{5}}\thead: {sent.words[word.head - 1].text if word.head > 0 else "root":{10}}'for sent in doc.sentences for word in sent.words], sep='\n')
-        print("\n")
-        print("\n")
-
-        for palavra in ListaDeTokensStanford:
-            print("Palavra: ",palavra.text)
-            print(f"{'Filhos: : '}{[substanP.text for substanP in palavra.filhos]}")
-            print("\n")
-        '''
 
         ListaFinal = self._MesclarDependencias(ListaDeTokensDefinitiva, ListaDeTokensStanford)
 
@@ -772,7 +762,7 @@ class Projeto:
 
         con = self._RemoverCasesDuplicados(con)
 
-        self.conhecimentoMaster = con
+        return con
 
 
     def _AdicionarNosNoGrafo(self,conhecimento, G):
