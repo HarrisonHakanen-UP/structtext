@@ -65,12 +65,12 @@ class Comparacao:
 
         return listaDeSinonimos
 
-    def CompararConhecimentos(self, con, con2):
+    def CompararConhecimentos(self,con, con2):
 
         db = mysql.connect(
             host="localhost",
             user="root",
-            password="testeTCC",
+            password="Eunaosei1997",
             database="WordNet_WordNetBr",
             auth_plugin='mysql_native_password'
         )
@@ -114,13 +114,14 @@ class Comparacao:
                                 # Verifica se a palavra está na lista de sinônimos
                                 for sinonimo in listaDeSinonimos:
 
-                                    if sinonimo[0] == palavraFraseTeste.palavra.lemma_:
+                                    if sinonimo[0].upper() == palavraFraseTeste.palavra.lemma_.upper():
                                         continua = 1
 
                             else:
                                 continua = 1
 
                             if continua == 1:
+                                verbo = Classes.VerboIgual(palavraFraseTeste.palavra)
 
                                 VerboPrincipalNegativo = 0
                                 VerboTesteNegativo = 0
@@ -138,6 +139,7 @@ class Comparacao:
                                             if tag[0][0][0] == "Polarity" and tag[0][0][1] == "Neg":
                                                 VerboTesteNegativo = 1
 
+                                                # Verificando se o verbo que está sendo analisado é positivo ou negativo
                                 if VerboPrincipalNegativo == 1 and VerboTesteNegativo == 1 or VerboPrincipalNegativo == 0 and VerboTesteNegativo == 0:
 
                                     # VERIFICAR O SUBSTANTIVO PRINCIPAL
@@ -161,9 +163,6 @@ class Comparacao:
                                                                         pesquisando_substantivo_posterior.palavra)
                                                                     substantivoComCase1.append(
                                                                         substantivoPrincipal_FrasePrincipal)
-
-                                                                    # Verificar as demais relações do substantivo
-                                                                    # ...
 
                                                                     existeCase1 = 1
 
@@ -189,9 +188,6 @@ class Comparacao:
                                                                                 pesquisando_substantivo_posterior.palavra)
                                                                             substantivoComCase2.append(substantivo)
 
-                                                                            # Verificar as demais relações do substantivo
-                                                                            # ...
-
                                                                             existeCase2 = 1
 
                                             if substantivo.pos_ == "N" and self.cbow_model.similarity(
@@ -201,15 +197,15 @@ class Comparacao:
                                                 if existeCase1 == 1 and existeCase2 == 1:
                                                     if str(substantivoComCase1[0].text) + " " + str(
                                                             substantivoComCase1[1].text) == str(
-                                                        substantivoComCase2[0].text) + " " + str(
-                                                        substantivoComCase2[1].text):
+                                                            substantivoComCase2[0].text) + " " + str(
+                                                            substantivoComCase2[1].text):
                                                         print("Encontrou: " + str(
                                                             substantivoComCase1[2].text) + " " + str(
                                                             substantivoComCase1[0].text) + " " + str(
                                                             substantivoComCase1[
                                                                 1].text + " " + palavraFraseTeste.palavra.text))
 
-                                                        verbo = Classes.VerboIgual(palavraFraseTeste.palavra)
+                                                        # verbo = VerboIgual(palavraFraseTeste.palavra)
                                                         verbo.substantivoPrincipal.append(substantivoComCase1[2])
 
                                                         if jaAdicionouSubstantivo == 0:
@@ -224,12 +220,12 @@ class Comparacao:
 
                                                             jaAdicionouSubstantivo = 1
 
-                                                        listaDeVerbos.append(verbo)
+                                                        # listaDeVerbos.append(verbo)
 
                                                     elif str(substantivoComCase1[0].text) + " " + str(
                                                             substantivoComCase1[1].text) != str(
-                                                        substantivoComCase2[0].text) + " " + str(
-                                                        substantivoComCase2[1].text):
+                                                            substantivoComCase2[0].text) + " " + str(
+                                                            substantivoComCase2[1].text):
                                                         print("Não encontrou: " + str(
                                                             substantivoComCase1[2].text) + " " + str(
                                                             substantivoComCase1[0].text) + " " + str(
@@ -239,136 +235,132 @@ class Comparacao:
                                                     else:
                                                         if str(substantivoComCase1[0].text) + " " + str(
                                                                 substantivoComCase1[1].text) == str(
-                                                            substantivoComCase2[0].text) + " " + str(
-                                                            substantivoComCase2[1].text) and str(
-                                                            substantivoComCase1[0].text) + " " + str(
-                                                            substantivoComCase1[1].text) == "":
+                                                                substantivoComCase2[0].text) + " " + str(
+                                                                substantivoComCase2[1].text) and str(
+                                                                substantivoComCase1[0].text) + " " + str(
+                                                                substantivoComCase1[1].text) == "":
                                                             print("ok")
 
+                                                # Caso o substantivo principal do verbo não tenha cases ele adiciona somente o substantivo principal na comparação extraida
                                                 if existeCase1 == 0 and existeCase2 == 0:
 
-                                                    # O objeto palavra refere ao original.
-                                                    # O objeto substantivoPrincipal_FrasePrincipal se refere ao original
+                                                    print(palavraFraseTeste.palavra.text)
+                                                    print(palavra.palavra.text)
 
-                                                    # O objeto palavraFraseTeste se refere ao testado
-                                                    # O objeto substantivo se refere ao testado.
+                                                    for substantivoTeste in palavraFraseTeste.substantivoPrincipal:
 
-                                                    # Verificando outros substantivos no mesmo substantivo.
-                                                    '''
-                                                    Substantivo_Principal_Conhecimento = []
-                                                    Substantivo_Teste_Conhecimento = []
+                                                        for substantivoPrincipal in palavra.substantivoPrincipal:
 
-                                                    for subFrasePrincipal in con:
+                                                            if substantivoTeste.pos_ != "NPROP" and substantivoPrincipal.pos_ != "NPROP":
 
-                                                        if subFrasePrincipal.palavra.i == substantivoPrincipal_FrasePrincipal.i:
-                                                            Substantivo_Principal_Conhecimento = subFrasePrincipal
-                                                            break
+                                                                if self.cbow_model.similarity(substantivoTeste.text,
+                                                                                         substantivoPrincipal.text) > 0.5:
+                                                                    # verbo = VerboIgual(palavraFraseTeste.palavra)
+                                                                    verbo.substantivoPrincipal.append(substantivoTeste)
+                                                            else:
 
-
-                                                    for subFraseTeste in con2:
-
-                                                        if substantivo.i == subFraseTeste.palavra.i:
-                                                            Substantivo_Teste_Conhecimento
-                                                    '''
-
-                                                    for subFrasePrincipal in con:
-                                                        if substantivoPrincipal_FrasePrincipal.i == subFrasePrincipal.palavra.i:
-
-                                                            # Comparando os substantivos de um substantivo
-                                                            for SubstantivoPosterior_Principal in subFrasePrincipal.substantivo:
-
-                                                                for subFraseTeste in con2:
-                                                                    if substantivo.i == subFraseTeste.palavra.i:
-
-                                                                        for SubstantivoPosterior_Teste in subFraseTeste.substantivo:
-
-                                                                            if SubstantivoPosterior_Principal.pos_ == "N" and SubstantivoPosterior_Teste.pos_ == "N":
-                                                                                if self.cbow_model.similarity(
-                                                                                        SubstantivoPosterior_Principal.text,
-                                                                                        SubstantivoPosterior_Teste.text) < 0.5:
-                                                                                    print(
-                                                                                        SubstantivoPosterior_Teste.text)
-                                                                                    subFraseTeste.substantivo.remove(
-                                                                                        SubstantivoPosterior_Teste)
-
-                                                                            if SubstantivoPosterior_Principal.text != SubstantivoPosterior_Teste.text:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                            for SubstantivoPosterior_Principal in subFrasePrincipal.demaisRelacoes:
-
-                                                                for subFraseTeste in con2:
-                                                                    if substantivo.i == subFraseTeste.palavra.i:
-
-                                                                        for SubstantivoPosterior_Teste in subFraseTeste.demaisRelacoes:
-
-                                                                            if self.cbow_model.similarity(
-                                                                                    SubstantivoPosterior_Principal.text,
-                                                                                    SubstantivoPosterior_Teste.text) < 0.5:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                                            if SubstantivoPosterior_Principal.text != SubstantivoPosterior_Teste.text:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                            for SubstantivoPosterior_Principal in subFrasePrincipal.adjetivos:
-
-                                                                for subFraseTeste in con2:
-                                                                    if substantivo.i == subFraseTeste.palavra.i:
-
-                                                                        for SubstantivoPosterior_Teste in subFraseTeste.adjetivos:
-
-                                                                            if self.cbow_model.similarity(
-                                                                                    SubstantivoPosterior_Principal.text,
-                                                                                    SubstantivoPosterior_Teste.text) < 0.5:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                                            if SubstantivoPosterior_Principal.text != SubstantivoPosterior_Teste.text:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                            for SubstantivoPosterior_Principal in subFrasePrincipal.verbos:
-
-                                                                for subFraseTeste in con2:
-                                                                    if substantivo.i == subFraseTeste.palavra.i:
-
-                                                                        for SubstantivoPosterior_Teste in subFraseTeste.verbos:
-
-                                                                            if self.cbow_model.similarity(
-                                                                                    SubstantivoPosterior_Principal.text,
-                                                                                    SubstantivoPosterior_Teste.text) < 0.5:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                                            if SubstantivoPosterior_Principal.text != SubstantivoPosterior_Teste.text:
-                                                                                print(SubstantivoPosterior_Teste.text)
-                                                                                subFraseTeste.substantivo.remove(
-                                                                                    SubstantivoPosterior_Teste)
-
-                                                    verbo = Classes.VerboIgual(palavra.palavra)
-                                                    verbo.substantivoPrincipal.append(
-                                                        substantivoPrincipal_FrasePrincipal)
-                                                    listaDeVerbos.append(verbo)
+                                                                if substantivoTeste.pos_ == "NPROP" and substantivoPrincipal.pos_ == "NPROP":
+                                                                    if substantivoTeste.text == substantivoPrincipal.text:
+                                                                        verbo.substantivoPrincipal.append(
+                                                                            substantivoTeste)
 
                                         existeCase2 = 0
                                     existeCase1 = 0
 
-                                    substantivoComCase1 = []
-                                    substantivoComCase2 = []
-
                                     # VERIFICAR DEMAIS RELAÇÕES DO VERBO
-                                    # ...
+                                    for relacaoTeste in palavraFraseTeste.demaisRelacoes:
+                                        achouRelacao = 0
 
+                                        for relacaoPrincipal in palavra.demaisRelacoes:
+
+                                            if self.cbow_model.similarity(relacaoPrincipal.text, relacaoTeste.text) > 0.5:
+                                                achouRelacao = 1
+
+                                        if achouRelacao == 1:
+                                            verbo.demaisRelacoes.append(relacaoTeste)
+
+                                    # VERIFICAR OS OUTROS VERBOS
+                                    achouSinonimo = 0
+
+                                    for verboTeste in palavraFraseTeste.verbos:
+                                        listaDeSinonimos_ComparandoVerbos = self._ListarSinonimos(verboTeste.lemma_, cursor)
+                                        achouSinonimo = 0
+                                        for verboPrincipal in palavra.verbos:
+
+                                            for sinonimo in listaDeSinonimos_ComparandoVerbos:
+
+                                                if verboPrincipal.lemma_.upper() == sinonimo[0].upper():
+                                                    achouSinonimo = 1
+
+                                            if achouSinonimo == 1:
+                                                verbo.verbos.append(verboTeste)
+
+                                    # VERIFICAR OS SUBSTANTIVOS POSTERIORES
+
+                                    for substantivoPosteriorTeste in palavraFraseTeste.substantivo:
+
+                                        for substantivoPosteriorPrincipal in palavra.substantivo:
+
+                                            if substantivoPosteriorTeste.pos_ != "NPROP" and substantivoPosteriorPrincipal.pos_ != "NPROP":
+                                                if self.cbow_model.similarity(substantivoPosteriorTeste.text,
+                                                                         substantivoPosteriorPrincipal.text) > 0.5:
+                                                    verbo.substantivo.append(substantivoPosteriorTeste)
+
+                                            else:
+                                                if substantivoPosteriorTeste.pos_ == "NPROP" and substantivoPosteriorPrincipal.pos_ == "NPROP":
+                                                    if substantivoPosteriorTeste.text == substantivoPosteriorPrincipal:
+                                                        verbo.substantivo.append(substantivoPosteriorTeste)
+
+                                    listaDeVerbos.append(verbo)
                                 else:
                                     print("Verbos diferentes por um adv negativo")
+
                             continua = 0
+
+            # Ainda não estou testando NPROP
+            PesoAdjetivos = 0.4
+            PesoVerbos = 0.6
+
+            if palavra.palavra.pos_ == "N" or palavra.palavra.pos_ == "PROADJ" or palavra.palavra.pos_ == "PRO-KS" or palavra.palavra.pos_ == "PROPESS" or palavra.palavra.pos_ == "PRO-KS-REL" or palavra.palavra.pos_ == "PROSUB" and palavra.palavra.dep_ != "case":
+
+                for palavraFraseTeste in con2:
+
+                    substantivosIguais = 0
+                    if palavraFraseTeste.palavra.pos_ == "N" or palavraFraseTeste.palavra.pos_ == "PROADJ" or palavraFraseTeste.palavra.pos_ == "PRO-KS" or palavraFraseTeste.palavra.pos_ == "PROPESS" or palavraFraseTeste.palavra.pos_ == "PRO-KS-REL" or palavraFraseTeste.palavra.pos_ == "PROSUB" and palavraFraseTeste.palavra.dep_ != "case":
+
+                        if palavra.palavra.text.upper() != palavraFraseTeste.palavra.text.upper():
+
+                            if self.cbow_model.similarity(palavra.palavra.text, palavraFraseTeste.palavra.text) > 0.5:
+                                # verbo = VerboIgual(palavraFraseTeste.palavra)
+                                substantivosIguais = 1
+
+                        if palavra.palavra.text.upper() == palavraFraseTeste.palavra.text.upper():
+                            # verbo = VerboIgual(palavraFraseTeste.palavra)
+                            substantivosIguais = 1
+
+                        if substantivosIguais == 1:
+
+                            verbo = Classes.VerboIgual(palavraFraseTeste.palavra)
+
+                            # Conferir se os substantivos realmente são iguais analisando os adjetivos e a quais verbos eles estão ligados
+
+                            if len(palavra.adjetivos) > 0:
+
+                                for adjetivoPrincipal in palavra.adjetivos:
+
+                                    achouAdjetivo = 0
+
+                                    for adjetivoTeste in palavraFraseTeste.adjetivos:
+
+                                        if adjetivoPrincipal.text.upper() != adjetivoTeste.text.upper():
+
+                                            if self.cbow_model.similarity(adjetivoPrincipal.text, adjetivoTeste.text) > 0.5:
+                                                achouAdjetivo += 1
+
+                                        else:
+
+                                            achouAdjetivo += 1
+
+
 
         return listaDeVerbos
