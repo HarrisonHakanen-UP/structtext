@@ -34,18 +34,23 @@ class Projeto:
         conhecimento = self.conhecimentoMaster
 
         for palavra in conhecimento:
-            print("Palavra: ", palavra.palavra.text, "-", palavra.palavra.i, "-", palavra.palavra.pos_)
+            print("Palavra: ", palavra.palavra.text, "-", palavra.palavra.i, "-", palavra.palavra.pos_,
+                  "- Spacy lemma: ", palavra.palavra.lemma_)
 
             print(
-                f"{'Substantivo principal: '}{[substanP.text for substanP in palavra.substantivoPrincipal]}{[substanP.i for substanP in palavra.substantivoPrincipal]}")
+                f"{'Substantivo principal: '}{[substanP.text for substanP in palavra.substantivoPrincipal]}{[substanP.i for substanP in palavra.substantivoPrincipal]}{[substanP.depStanza_ for substanP in palavra.substantivoPrincipal]}")
 
-            print(f"{'Substantivo posterior: '}{[substan.text for substan in palavra.substantivo]}")
+            print(
+                f"{'Substantivo posterior: '}{[substan.text for substan in palavra.substantivo]}{[substan.depStanza_ for substan in palavra.substantivo]}")
 
-            print(f"{'Demais verbos: '}{[verb.text for verb in palavra.verbos]}")
+            print(
+                f"{'Demais verbos: '}{[verb.text for verb in palavra.verbos]}{[verb.depStanza_ for verb in palavra.verbos]}")
 
-            print(f"{'Adjetivos: '}{[adj.text for adj in palavra.adjetivos]}")
+            print(
+                f"{'Adjetivos: '}{[adj.text for adj in palavra.adjetivos]}{[adj.depStanza_ for adj in palavra.adjetivos]}")
 
-            print(f"{'Demais relações: '}{[demaisR.text for demaisR in palavra.demaisRelacoes]}")
+            print(
+                f"{'Demais relações: '}{[demaisR.text for demaisR in palavra.demaisRelacoes]}{[demaisR.depStanza_ for demaisR in palavra.demaisRelacoes]}")
 
             print("--------------------------")
             print("\n")
@@ -110,6 +115,11 @@ class Projeto:
 
         fraseAnalisada = frase
 
+        print("filhos")
+        for tk in frase:
+            for filho in tk.filhos:
+                print(filho.depStanza_)
+
         for indexFrase in range(len(fraseAnalisada)):
 
             tokenAux = Classes.TokenAux(fraseAnalisada[indexFrase].text)
@@ -117,13 +127,11 @@ class Projeto:
             tokenAux.i = fraseAnalisada[indexFrase].i
             tokenAux.dep_ = fraseAnalisada[indexFrase].dep_
             tokenAux.lemma_ = fraseAnalisada[indexFrase].lemma_
-
-            tokenAux.tag_.append(fraseAnalisada[indexFrase].tag_)
-
+            tokenAux.depStanza_ = fraseAnalisada[indexFrase].depStanza_
             tokenAux.tag_.append(fraseAnalisada[indexFrase].tag_)
 
             if fraseAnalisada[indexFrase].pos_ == "V" or fraseAnalisada[indexFrase].pos_ == "VAUX" or fraseAnalisada[
-                indexFrase].pos_ == "PCP":
+                indexFrase].pos_ == "PCP" or fraseAnalisada[indexFrase].pos_ == "VERB":
 
                 verbo = Classes.Palavra(tokenAux)
 
@@ -135,6 +143,7 @@ class Projeto:
                     childrenAux.dep_ = children.dep_
                     childrenAux.lemma_ = children.lemma_
                     childrenAux.tag_.append(children.tag_)
+                    childrenAux.depStanza_ = children.depStanza_
 
                     if children.pos_ == "N" or children.pos_ == "NPROP" or children.pos_ == "PROADJ" or children.pos_ == "PRO-KS" or children.pos_ == "PROPESS" or children.pos_ == "PRO-KS-REL" or children.pos_ == "PROSUB":
 
@@ -150,7 +159,7 @@ class Projeto:
 
 
 
-                    elif children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP":
+                    elif children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP" or children.pos_ == "VERB":
                         verbo.verbos.append(childrenAux)
 
                     elif children.pos_ == "ADJ":
@@ -161,10 +170,10 @@ class Projeto:
 
                     achouAntes = 0
                     achouDepois = 0
-
+                '''
                 if len(verbo.substantivoPrincipal) == 0 and substantivoP.text != "kk":
                     verbo.substantivoPrincipal.append(substantivoP)
-
+                '''
                 listaDePalavras.append(verbo)
 
             if fraseAnalisada[indexFrase].pos_ == "ADJ" or fraseAnalisada[indexFrase].pos_ == "ADV":
@@ -183,6 +192,7 @@ class Projeto:
                     childrenAux.dep_ = children.dep_
                     childrenAux.lemma_ = children.lemma_
                     childrenAux.tag_.append(children.tag_)
+                    childrenAux.depStanza_ = children.depStanza_
 
                     if children.pos_ == "N" or children.pos_ == "NPROP" or children.pos_ == "PROADJ" or children.pos_ == "PRO-KS" or children.pos_ == "PROPESS" or children.pos_ == "PRO-KS-REL" or children.pos_ == "PROSUB":
 
@@ -211,8 +221,9 @@ class Projeto:
                     childrenAux.dep_ = children.dep_
                     childrenAux.lemma_ = children.lemma_
                     childrenAux.tag_.append(children.tag_)
+                    childrenAux.depStanza_ = children.depStanza_
 
-                    if children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP":
+                    if children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP" or children.pos_ == "VERB":
                         substantivo.verbos.append(childrenAux)
 
                     elif children.pos_ == "N" or children.pos_ == "NPROP" or children.pos_ == "PROADJ" or children.pos_ == "PRO-KS" or children.pos_ == "PROPESS" or children.pos_ == "PRO-KS-REL" or children.pos_ == "PROSUB":
@@ -226,6 +237,7 @@ class Projeto:
                                 childrenAux2.dep_ = child2.dep_
                                 childrenAux2.lemma_ = child2.lemma_
                                 childrenAux2.tag_.append(child2.tag_)
+                                childrenAux2.depStanza_ = child2.depStanza_
 
                                 # print(childrenAux2.pos_)
 
@@ -260,7 +272,7 @@ class Projeto:
 
         for token in fraseTeste4:
 
-            if token.pos_ == "V" or token.pos_ == "VAUX" or token.pos_ == "PCP":
+            if token.pos_ == "V" or token.pos_ == "VAUX" or token.pos_ == "PCP" or token.pos_ == "VERB":
                 verbos += 1
 
             if token.i == len(fraseTeste4) - 1:
@@ -279,6 +291,7 @@ class Projeto:
                 t.dep_ = token.dep_
                 t.lemma_ = token.lemma_
                 t.tag_.append(token.tag_)
+                t.depStanza_ = token.depStanza_
                 listaDeToken.append(t)
 
             if verbos != 2 and token.i != len(fraseTeste4) - 1:
@@ -293,6 +306,7 @@ class Projeto:
                 t.dep_ = token.dep_
                 t.lemma_ = token.lemma_
                 t.tag_.append(token.tag_)
+                t.depStanza_ = token.depStanza_
                 listaDeToken.append(t)
 
 
@@ -318,19 +332,20 @@ class Projeto:
                                 chAux.dep_ = ch.dep_
                                 chAux.lemma_ = ch.lemma_
                                 chAux.tag_.append(ch.tag_)
+                                chAux.depStanza_ = ch.depStanza_
 
                                 tok.filhos.append(chAux)
 
                 for palavra in listaDeToken:
 
-                    if palavra.pos_ == "V" or palavra.pos_ == "AUX" or palavra.pos_ == "PCP":
+                    if palavra.pos_ == "V" or palavra.pos_ == "AUX" or palavra.pos_ == "PCP" or palavra.pos_ == "VERB":
 
                         for con in conhecimento:
 
                             if con.palavra.text == palavra.text:
                                 for children in palavra.filhos:
 
-                                    if children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP":
+                                    if children.pos_ == "V" or children.pos_ == "VAUX" or children.pos_ == "PCP" or children.pos_ == "VERB":
 
                                         for verbo in con.verbos:
                                             if verbo.text == children.text:
@@ -379,6 +394,7 @@ class Projeto:
                 t.dep_ = token.dep_
                 t.lemma_ = token.lemma_
                 t.tag_.append(token.tag_)
+                t.depStanza_ = token.depStanza_
 
                 t.filhos = token.filhos
                 listaDeToken.append(t)
@@ -505,7 +521,9 @@ class Projeto:
             tokenAuxiliar = Classes.TokenAux(tokenSpacy.text)
             tokenAuxiliar.i = tokenSpacy.i
             tokenAuxiliar.dep_ = tokenSpacy.dep_
+            tokenAuxiliar.lemma_ = tokenSpacy.lemma_
             tokenAuxiliar.tag_.append(self._TratarTag(str(tokenSpacy.tag_)))
+            tokenAuxiliar.pos_ = tokenSpacy.pos_
 
             ListaDeTokensAuxiliares.append(tokenAuxiliar)
 
@@ -513,7 +531,8 @@ class Projeto:
         for indexNlpNet in range(len(fraseNlpNet)):
 
             for indexPalavraNlpNet in range(len(fraseNlpNet[indexNlpNet])):
-                ListaDeTokensAuxiliares[index].pos_ = fraseNlpNet[indexNlpNet][indexPalavraNlpNet][1]
+                if ListaDeTokensAuxiliares[index].pos_ != "NUM" and ListaDeTokensAuxiliares[index].pos_ != "PUNCT":
+                    ListaDeTokensAuxiliares[index].pos_ = fraseNlpNet[indexNlpNet][indexPalavraNlpNet][1]
                 index += 1
 
         for tokenSpacy in fraseSpacy:
@@ -530,12 +549,15 @@ class Projeto:
                                 childAux.pos_ = childrenEmTokensAuxiliares.pos_
                                 childAux.i = children.i
                                 childAux.dep_ = children.dep_
+                                childAux.lemma_ = children.lemma_
                                 childAux.tag_.append(self._TratarTag(str(children.tag_)))
                                 tokenAux.filhos.append(childAux)
 
                     break
 
-            ListaDeTokensDefinitiva.append(tokenAux)
+            if tokenAux.pos_ != "PUNCT":
+                ListaDeTokensDefinitiva.append(tokenAux)
+
         return ListaDeTokensDefinitiva
 
     def _CompletarPOS_NER(self,filho,frase):
@@ -605,8 +627,6 @@ class Projeto:
 
                     filhoAux = Classes.TokenAux(word.text)
                     filhoAux.i = int(word.id) - 1
-                    '''Arrumar para que os filhos também tenham tagger e pos'''
-
 
                     palavra.filhos.append(filhoAux)
 
@@ -621,9 +641,8 @@ class Projeto:
                                 word2.head - 1].text and sent.words[word.head - 1].id == sent2.words[word2.head - 1].id:
                                 filhoAux2 = Classes.TokenAux(word2.text)
                                 filhoAux2.i = int(word2.id) - 1
-                                '''Arrumar para que os filhos também tenham tagger e pos'''
 
-                                self._CompletarPOS_NER(filhoAux2,frase)
+                                self._CompletarPOS_NER(filhoAux2, frase)
 
                                 palavra.filhos.append(filhoAux2)
 
@@ -637,23 +656,29 @@ class Projeto:
     def _MesclarDependencias(self,ListaSpacy, ListaStanford):
         existe = 0
 
+        Palavras_que_ja_passaram = []
+
         for stanford in ListaStanford:
             for spacy in ListaSpacy:
 
-                if stanford.i == spacy.i and stanford.text == spacy.text:
+                if spacy.i not in Palavras_que_ja_passaram:
+                    if stanford.text == spacy.text:
+                        Palavras_que_ja_passaram.append(spacy.i)
 
-                    for stanFilho in stanford.filhos:
+                        for stanFilho in stanford.filhos:
 
-                        for spacyFilho in spacy.filhos:
+                            for spacyFilho in spacy.filhos:
 
-                            if stanFilho.i == spacyFilho.i:
-                                existe = 1
-                                break
+                                if stanFilho.i == spacyFilho.i:
+                                    existe = 1
+                                    break
 
-                        if existe == 0:
-                            spacy.filhos.append(stanFilho)
+                            if existe == 0:
+                                spacy.filhos.append(stanFilho)
 
-                        existe = 0
+                            existe = 0
+
+
         '''
         print("\n\n")
         print("Final")
@@ -740,30 +765,138 @@ class Projeto:
 
         return ListaDeTokens
 
+    def _AjustarVerbosComSeusSubstantivos(self,conhecimento):
+
+        for token in conhecimento:
+
+            if token.palavra.pos_ == "V" or token.palavra.pos_ == "VAUX" or token.palavra.pos_ == "VERB":
+
+                if len(token.substantivoPrincipal) == 0:
+
+                    for verboPai in conhecimento:
+
+                        if verboPai.palavra.pos_ == "V" or verboPai.palavra.pos_ == "VAUX" or verboPai.palavra.pos_ == "VERB":
+
+                            if len(verboPai.substantivoPrincipal) > 0:
+                                for itemVerbo in verboPai.verbos:
+
+                                    if itemVerbo.i == token.palavra.i:
+                                        token.substantivoPrincipal = verboPai.substantivoPrincipal
+
+        return conhecimento
+
+    def _AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
+
+        ListaStanza = nlp(frase)
+        Palavras_que_ja_passaram = []
+
+        for tokenSpacy in ListaSpacy:
+
+            for sentenceStanza in ListaStanza.sentences:
+
+                for tokenStanza in sentenceStanza.words:
+
+                    if tokenStanza.id not in Palavras_que_ja_passaram:
+
+                        if tokenStanza.text == tokenSpacy.text:
+                            tokenSpacy.depStanza_ = tokenStanza.deprel
+
+                            Palavras_que_ja_passaram.append(tokenStanza.id)
+
+        for token in ListaSpacy:
+
+            for filho in token.filhos:
+
+                for tokenFilho in ListaSpacy:
+
+                    if filho.i == tokenFilho.i:
+
+                        filho.depStanza_ = tokenFilho.depStanza_
+
+        return ListaSpacy
+
+    def _OrdenarListaDePalavras(self,Lista):
+
+        listaDeIds = []
+        ListaFinal = []
+
+        for token in Lista:
+            listaDeIds.append(token.i)
+
+        listaDeIds.sort()
+
+        for idSort in listaDeIds:
+
+            for token in Lista:
+
+                if token.i == idSort:
+                    ListaFinal.append(token)
+
+        return ListaFinal
+
+    def _AjustarAdjetivos(self, con):
+
+        subs = []
+
+        for token in con:
+
+            if token.palavra.pos_ == "ADJ":
+
+                if len(token.adjetivos) > 0:
+                    # Encontra qual substantivo tem o adjetivo
+                    for substantivo in con:
+
+                        for adjetivoDoSubstantivo in substantivo.adjetivos:
+
+                            if adjetivoDoSubstantivo.i == token.palavra.i:
+                                subs = substantivo
+
+                for adjetivo in token.adjetivos:
+                    subs.adjetivos.append(adjetivo)
+
+                    token.adjetivos.remove(adjetivo)
+        return con
+
     def _ConhecimentoCalibrado(self):
 
         frase = self.frase
 
-        ListaDeTokensDefinitiva = self._SubstituirPOS(frase)
+        ListaDeTokensDefinitiva = self._SubstituirPOS(self.frase)
 
         ListaDeTokensStanford = self._StanfordDependencyParsing(frase)
+
+        ListaDeTokensStanford = self._OrdenarListaDePalavras(ListaDeTokensStanford)
+
+        ListaDeTokensDefinitiva = self._AdicionarDependenciaDoStanza(ListaDeTokensDefinitiva, frase)
 
         ListaFinal = self._MesclarDependencias(ListaDeTokensDefinitiva, ListaDeTokensStanford)
 
         ListaFinal = self._RemoverPontuacoes(ListaFinal)
 
-        ListaFinal = self._ConverterTokenEmEntidade(frase, ListaFinal)
+        ListaFinal2 = self._ConverterTokenEmEntidade(frase, ListaFinal)
 
-        con = self._ExtrairConhecimento(ListaFinal)
+        '''
+        for token in ListaFinal:
 
-        con = self._RemoverLigacoes(con)
+            print(token.text," ",token.depStanza_)
+            for filho in token.filhos:
+                print(filho.depStanza_)
+        '''
+        con = self._ExtrairConhecimento(ListaFinal2)
 
         con = self._AjustarCases(con)
 
         con = self._RemoverCasesDuplicados(con)
 
-        return con
+        con = self._AjustarAdjetivos(con)
 
+        con = self._AjustarVerbosComSeusSubstantivos(con)
+
+        '''
+        for conhecimento in con:
+            print(conhecimento.palavra.text," ",conhecimento.palavra.depStanza_)
+        '''
+        return con
 
     def _AdicionarNosNoGrafo(self,conhecimento, G):
         for objeto in conhecimento:

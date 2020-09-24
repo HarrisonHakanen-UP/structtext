@@ -35,3 +35,4 @@ class TokenAux:
         self.dep_ = ""
         self.lemma_ = ""
         self.tag_ = []
+        self.depStanza_ = ""

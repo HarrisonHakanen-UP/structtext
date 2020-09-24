@@ -25,18 +25,26 @@ entidades = "Salvador Dalí i Domènech, foi o 1º Marquês de Dalí de Púbol, 
 
 adjetivo = "Marcelo é bonito e muito gentil, ontem ele não pode ir ao jogo de futebol mas ficou em casa. Marcos um rapaz muito prestativo estudou matemática"
 
-conhecimento1 = Projeto(frase1)
-conhecimento2 = Projeto(frase3)
+fraseTeste6 = "Maria uma moça bela e inteligente, embora não tivesse tempo, comprou um cachorro"
+fraseTeste7 = "Maria ontem estava andando pela rua e foi a uma loja e mesmo que não tivesse dinheiro e seu marido não concordasse, comprou um cachorro muito bonito"
 
-Comp = Comparacao(conhecimento1,conhecimento2)
+testandofrase = "Fui para casa da minha avó ontem estudar matemática"
 
 
 
+conhecimento1 = Projeto(testandofrase)
+#conhecimento2 = Projeto(fraseTeste7)
+
+conhecimento1.ImprimirConhecimento()
+#Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
+
+#Comp.ImprimirConhecimento()
+#Comp.ImprimirGrafo()
 #projeto.ConhecimentoCalibrado()
 
 #projeto.ImprimirGrafo()
 
-#projeto.ImprimirConhecimento()
+
 
 
 
