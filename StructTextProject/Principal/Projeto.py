@@ -856,7 +856,7 @@ class Projeto:
                             tokenStanza.id = tokenStanza.id - Controlar_id
                             Palavras_que_ja_passaram.append(tokenStanza.id)
 
-            '''
+        '''
 
         for token in ListaSpacy:
 
@@ -912,6 +912,33 @@ class Projeto:
                     token.adjetivos.remove(adjetivo)
         return con
 
+
+    def _AjustarPosses(self,conhecimento):
+
+        for token in conhecimento:
+
+            if token.palavra.pos_ == "N" or token.palavra.pos_ == "NPROP" or token.palavra.pos_ == "PROADJ" or token.palavra.pos_ == "PRO-KS" or token.palavra.pos_ == "PROPESS" or token.palavra.pos_ == "PRO-KS-REL" or token.palavra.pos_ == "PROSUB":
+
+                for relacao in token.verbos:
+
+                    if relacao.depStanza_ == "cop":
+
+                        for sub in token.substantivo:
+                            for substantivo in conhecimento:
+
+                                if sub.i == substantivo.palavra.i:
+
+                                    for verbo in token.verbos:
+                                        if verbo.i != relacao.i:
+                                            substantivo.verbos.append(verbo)
+
+                                    for relacao in token.demaisRelacoes:
+                                        substantivo.demaisRelacoes.append(relacao)
+
+                                    for adj in token.adjetivos:
+                                        substantivo.adjetivos.append(adj)
+        return conhecimento
+
     def _ConhecimentoCalibrado(self):
 
         frase = self.frase
@@ -930,6 +957,7 @@ class Projeto:
 
         ListaFinal2 = self._ConverterTokenEmEntidade(frase, ListaFinal)
 
+
         '''
         for token in ListaFinal:
 
@@ -947,6 +975,7 @@ class Projeto:
 
         con = self._AjustarVerbosComSeusSubstantivos(con)
 
+        con = self._AjustarPosses(con)
         '''
         for conhecimento in con:
             print(conhecimento.palavra.text," ",conhecimento.palavra.depStanza_)

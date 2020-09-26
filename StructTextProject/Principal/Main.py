@@ -30,16 +30,18 @@ fraseTeste7 = "Maria ontem estava andando pela rua e foi a uma loja e mesmo que 
 
 testandofrase = "Fui para casa da minha avó ontem estudar matemática"
 
+'''O que são processos'''
+respostaProfessor_P7 = "Os chamados processos são módulos executáveis, é uma lista de instruções, a qual informa ao processador que passos devem ser executados e em quais momentos isso acontece."
+resposta1_P7 = "Os processos são listas que servem para dizer ao processador o que deve ser feito"
 
+conhecimento1 = Projeto(respostaProfessor_P7)
+conhecimento2 = Projeto(resposta1_P7)
 
-conhecimento1 = Projeto(testandofrase)
-#conhecimento2 = Projeto(fraseTeste7)
-
-conhecimento1.ImprimirConhecimento()
-#Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
+#conhecimento1.ImprimirGrafo()
+Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
 
 #Comp.ImprimirConhecimento()
-#Comp.ImprimirGrafo()
+Comp.ImprimirGrafo()
 #projeto.ConhecimentoCalibrado()
 
 #projeto.ImprimirGrafo()
