@@ -115,10 +115,13 @@ class Projeto:
 
         fraseAnalisada = frase
 
+        '''
         print("filhos")
         for tk in frase:
             for filho in tk.filhos:
                 print(filho.depStanza_)
+        '''
+
 
         for indexFrase in range(len(fraseAnalisada)):
 
@@ -474,7 +477,7 @@ class Projeto:
                                             Index_palavra -=1
                                             voltar-=1
 
-                                        print(con[Index_palavra].palavra.text)
+                                        #print(con[Index_palavra].palavra.text)
                                         if con[Index_palavra].palavra.pos_ == "V" or con[Index_palavra].palavra.pos_ == "VAUX":
 
 
@@ -627,11 +630,11 @@ class Projeto:
 
                     filhoAux = Classes.TokenAux(word.text)
                     filhoAux.i = int(word.id) - 1
-
+                    filhoAux.depStanza_ = word.deprel
                     palavra.filhos.append(filhoAux)
 
                     palavra.i = int(sent.words[word.head - 1].id) - 1
-
+                    palavra.depStanza_ = word.deprel
                     header = sent.words[word.head - 1].text
 
                     for sent2 in fraseStanford.sentences:
@@ -641,7 +644,7 @@ class Projeto:
                                 word2.head - 1].text and sent.words[word.head - 1].id == sent2.words[word2.head - 1].id:
                                 filhoAux2 = Classes.TokenAux(word2.text)
                                 filhoAux2.i = int(word2.id) - 1
-
+                                filhoAux2.depStanza_ = word2.deprel
                                 self._CompletarPOS_NER(filhoAux2, frase)
 
                                 palavra.filhos.append(filhoAux2)
@@ -676,6 +679,7 @@ class Projeto:
                             if existe == 0:
                                 spacy.filhos.append(stanFilho)
 
+
                             existe = 0
 
 
@@ -683,9 +687,14 @@ class Projeto:
         print("\n\n")
         print("Final")
         for token in ListaSpacy:
-            print(token.text)
-            print(f"{[child.text for child in token.filhos]}")
+            print(token.text," ",token.depStanza_,token.i)
+
+            for filho in token.filhos:
+                print(filho.text," ",filho.depStanza_,filho.i)
+            print("-----------------------------------")
+            print("\n\n")
         '''
+
         return ListaSpacy
 
 
@@ -789,7 +798,46 @@ class Projeto:
 
         ListaStanza = nlp(frase)
         Palavras_que_ja_passaram = []
+        Controlar_id = 0
+        Continua = 0
+        TokensStanza = []
+        for sentenceStanza in ListaStanza.sentences:
+            for tokenStanza in sentenceStanza.words:
 
+                Token = Classes.TokenAux(tokenStanza.text)
+                Token.i = tokenStanza.id
+                Token.depStanza_ = tokenStanza.deprel
+                TokensStanza.append(Token)
+
+
+        indexSpacy = 0
+        while indexSpacy < len(ListaSpacy):
+
+            for tokenStanza in TokensStanza:
+
+                if tokenStanza.i not in Palavras_que_ja_passaram:
+
+                    if Continua == 1:
+
+                        if tokenStanza.text == ListaSpacy[indexSpacy+1].text:
+                            indexSpacy+=1
+                            Continua = 0
+
+                    if tokenStanza.text == ListaSpacy[indexSpacy].text:
+
+                        ListaSpacy[indexSpacy].depStanza_ = tokenStanza.depStanza_
+                        Palavras_que_ja_passaram.append(tokenStanza.i)
+                        break
+
+                    else:
+                        Controlar_id += 1
+                        Continua = 1
+
+                        Palavras_que_ja_passaram.append(tokenStanza.i)
+                        break
+            if Continua == 0:
+                indexSpacy += 1
+        '''
         for tokenSpacy in ListaSpacy:
 
             for sentenceStanza in ListaStanza.sentences:
@@ -800,8 +848,15 @@ class Projeto:
 
                         if tokenStanza.text == tokenSpacy.text:
                             tokenSpacy.depStanza_ = tokenStanza.deprel
-
                             Palavras_que_ja_passaram.append(tokenStanza.id)
+                            break
+
+                        else:
+                            Controlar_id += 1
+                            tokenStanza.id = tokenStanza.id - Controlar_id
+                            Palavras_que_ja_passaram.append(tokenStanza.id)
+
+            '''
 
         for token in ListaSpacy:
 
