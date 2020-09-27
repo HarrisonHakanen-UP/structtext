@@ -31,17 +31,25 @@ fraseTeste7 = "Maria ontem estava andando pela rua e foi a uma loja e mesmo que 
 testandofrase = "Fui para casa da minha avó ontem estudar matemática"
 
 '''O que são processos'''
-respostaProfessor_P7 = "Os chamados processos são módulos executáveis, é uma lista de instruções, a qual informa ao processador que passos devem ser executados e em quais momentos isso acontece."
-resposta1_P7 = "Os processos são listas que servem para dizer ao processador o que deve ser feito"
+respostaProfessor_P1 = "Os chamados processos são módulos executáveis, é uma lista de instruções, a qual informa ao processador que passos devem ser executados e em quais momentos isso acontece."
+resposta1_P1 = "Os processos são listas que servem para dizer ao processador o que deve ser feito"
 
-conhecimento1 = Projeto(respostaProfessor_P7)
-conhecimento2 = Projeto(resposta1_P7)
+'''Diferença entre programa e processo'''
+respostaProfessor_P2 = "Um programa é um software de computador que tem uma lista de processos. Um processo é uma lista de instruções que são enviadas para o processador."
+resposta1_P2 = "O processo é uma lista de passos enquanto um programa é um softaware."
+
+
+
+
+
+conhecimento1 = Projeto(respostaProfessor_P2)
+conhecimento2 = Projeto(resposta1_P2)
 
 #conhecimento1.ImprimirGrafo()
-Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
+#Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
 
 #Comp.ImprimirConhecimento()
-Comp.ImprimirGrafo()
+#Comp.ImprimirGrafo()
 #projeto.ConhecimentoCalibrado()
 
 #projeto.ImprimirGrafo()

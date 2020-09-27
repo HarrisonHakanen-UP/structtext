@@ -801,14 +801,22 @@ class Projeto:
         Controlar_id = 0
         Continua = 0
         TokensStanza = []
+
+        Frase = 0
         for sentenceStanza in ListaStanza.sentences:
+
             for tokenStanza in sentenceStanza.words:
-
-                Token = Classes.TokenAux(tokenStanza.text)
-                Token.i = tokenStanza.id
-                Token.depStanza_ = tokenStanza.deprel
-                TokensStanza.append(Token)
-
+                if Frase == 0:
+                    Token = Classes.TokenAux(tokenStanza.text)
+                    Token.i = tokenStanza.id
+                    Token.depStanza_ = tokenStanza.deprel
+                    TokensStanza.append(Token)
+                else:
+                    Token = Classes.TokenAux(tokenStanza.text)
+                    Token.i = int(TokensStanza[-1].i) + 1
+                    Token.depStanza_ = tokenStanza.deprel
+                    TokensStanza.append(Token)
+            Frase += 1
 
         indexSpacy = 0
         while indexSpacy < len(ListaSpacy):
@@ -980,6 +988,8 @@ class Projeto:
         for conhecimento in con:
             print(conhecimento.palavra.text," ",conhecimento.palavra.depStanza_)
         '''
+
+        print("conhecimento concluido")
         return con
 
     def _AdicionarNosNoGrafo(self,conhecimento, G):
