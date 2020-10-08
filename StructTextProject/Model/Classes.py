@@ -23,6 +23,8 @@ class VerboIgual:
         self.verbos_naoEncontrados = []
         self.adjetivos = []
         self.adjetivos_naoEncontrados = []
+        self.semelhanca = 0
+
 
 
 class TokenAux:

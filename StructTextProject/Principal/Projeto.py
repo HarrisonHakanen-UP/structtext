@@ -97,7 +97,6 @@ class Projeto:
 
         return listaDeTags
 
-
     def _ExtrairConhecimento(self,frase):
         vemAntes = 0
 
@@ -114,14 +113,6 @@ class Projeto:
         existeCase = 0
 
         fraseAnalisada = frase
-
-        '''
-        print("filhos")
-        for tk in frase:
-            for filho in tk.filhos:
-                print(filho.depStanza_)
-        '''
-
 
         for indexFrase in range(len(fraseAnalisada)):
 
@@ -152,12 +143,13 @@ class Projeto:
 
                         if children.dep_ != "case":
 
-                            if children.i < tokenAux.i:
+                            if children.dep_ == "nsubj":
                                 substantivoP = childrenAux
                                 verbo.substantivoPrincipal.append(childrenAux)
                                 achouAntes = 1
 
                             else:
+
                                 verbo.substantivo.append(childrenAux)
 
 
@@ -510,9 +502,8 @@ class Projeto:
 
         return con
 
-
-
     def _SubstituirPOS(self,frase):
+
         fraseSpacy = nlpPor(frase)
         fraseNlpNet = tagger.tag(frase)
 
@@ -563,13 +554,12 @@ class Projeto:
 
         return ListaDeTokensDefinitiva
 
-    def _CompletarPOS_NER(self,filho,frase):
+    def _CompletarPOS_NER(self,filho, frase):
         spacyTokens = nlpPor(frase)
         tokenF = []
         tokenT = []
         contF = 0
         contT = 0
-
 
         for token in spacyTokens:
             if token.i == filho.i:
@@ -590,13 +580,12 @@ class Projeto:
                         contF += 1
 
                     for tokenTras in range(len(spacyTokens)):
-                        if spacyTokens[-(tokenTras+1)].text == filho.text:
-                            tokenT.append(spacyTokens[-(tokenTras+1)])
+                        if spacyTokens[-(tokenTras + 1)].text == filho.text:
+                            tokenT.append(spacyTokens[-(tokenTras + 1)])
                             break
-                        contT +=1
+                        contT += 1
 
-
-                    if contF<contT and contF != 0:
+                    if contF < contT and contF != 0:
                         filho.i = tokenF[0].i
                         filho.pos_ = tokenF[0].pos_
                         filho.dep_ = tokenF[0].dep_
@@ -609,7 +598,6 @@ class Projeto:
                         filho.dep_ = tokenT[0].dep_
                         filho.lemma_ = tokenT[0].lemma_
                         filho.tag_ = tokenT[0].tag_
-
 
     def _StanfordDependencyParsing(self,frase):
         listaDePalavras = []
@@ -631,6 +619,7 @@ class Projeto:
                     filhoAux = Classes.TokenAux(word.text)
                     filhoAux.i = int(word.id) - 1
                     filhoAux.depStanza_ = word.deprel
+
                     palavra.filhos.append(filhoAux)
 
                     palavra.i = int(sent.words[word.head - 1].id) - 1
@@ -653,10 +642,18 @@ class Projeto:
 
                     listaDePalavras.append(palavra)
 
+        '''
+        for token in listaDePalavras:
+            print(token.i," ",token.text," ",token.depStanza_)
+
+            for filho in token.filhos:
+                print(filho.i," ",filho.text," ",filho.depStanza_)
+        '''
+
         return listaDePalavras
 
-
     def _MesclarDependencias(self,ListaSpacy, ListaStanford):
+
         existe = 0
 
         Palavras_que_ja_passaram = []
@@ -679,24 +676,9 @@ class Projeto:
                             if existe == 0:
                                 spacy.filhos.append(stanFilho)
 
-
                             existe = 0
 
-
-        '''
-        print("\n\n")
-        print("Final")
-        for token in ListaSpacy:
-            print(token.text," ",token.depStanza_,token.i)
-
-            for filho in token.filhos:
-                print(filho.text," ",filho.depStanza_,filho.i)
-            print("-----------------------------------")
-            print("\n\n")
-        '''
-
         return ListaSpacy
-
 
     def _ConverterTokenEmEntidade(self,frase, ListaDeTokens):
 
@@ -794,15 +776,15 @@ class Projeto:
 
         return conhecimento
 
-    def _AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
+    def AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
 
         ListaStanza = nlp(frase)
         Palavras_que_ja_passaram = []
         Controlar_id = 0
         Continua = 0
         TokensStanza = []
-
         Frase = 0
+
         for sentenceStanza in ListaStanza.sentences:
 
             for tokenStanza in sentenceStanza.words:
@@ -827,8 +809,8 @@ class Projeto:
 
                     if Continua == 1:
 
-                        if tokenStanza.text == ListaSpacy[indexSpacy+1].text:
-                            indexSpacy+=1
+                        if tokenStanza.text == ListaSpacy[indexSpacy + 1].text:
+                            indexSpacy += 1
                             Continua = 0
 
                     if tokenStanza.text == ListaSpacy[indexSpacy].text:
@@ -845,26 +827,26 @@ class Projeto:
                         break
             if Continua == 0:
                 indexSpacy += 1
-        '''
-        for tokenSpacy in ListaSpacy:
+            '''
+            for tokenSpacy in ListaSpacy:
 
-            for sentenceStanza in ListaStanza.sentences:
+                for sentenceStanza in ListaStanza.sentences:
 
-                for tokenStanza in sentenceStanza.words:
+                    for tokenStanza in sentenceStanza.words:
 
-                    if tokenStanza.id not in Palavras_que_ja_passaram:
+                        if tokenStanza.id not in Palavras_que_ja_passaram:
 
-                        if tokenStanza.text == tokenSpacy.text:
-                            tokenSpacy.depStanza_ = tokenStanza.deprel
-                            Palavras_que_ja_passaram.append(tokenStanza.id)
-                            break
+                            if tokenStanza.text == tokenSpacy.text:
+                                tokenSpacy.depStanza_ = tokenStanza.deprel
+                                Palavras_que_ja_passaram.append(tokenStanza.id)
+                                break
 
-                        else:
-                            Controlar_id += 1
-                            tokenStanza.id = tokenStanza.id - Controlar_id
-                            Palavras_que_ja_passaram.append(tokenStanza.id)
+                            else:
+                                Controlar_id += 1
+                                tokenStanza.id = tokenStanza.id - Controlar_id
+                                Palavras_que_ja_passaram.append(tokenStanza.id)
 
-        '''
+            '''
 
         for token in ListaSpacy:
 
@@ -873,7 +855,6 @@ class Projeto:
                 for tokenFilho in ListaSpacy:
 
                     if filho.i == tokenFilho.i:
-
                         filho.depStanza_ = tokenFilho.depStanza_
 
         return ListaSpacy
@@ -920,7 +901,6 @@ class Projeto:
                     token.adjetivos.remove(adjetivo)
         return con
 
-
     def _AjustarPosses(self,conhecimento):
 
         for token in conhecimento:
@@ -934,7 +914,7 @@ class Projeto:
                         for sub in token.substantivo:
                             for substantivo in conhecimento:
 
-                                if sub.i == substantivo.palavra.i:
+                                if sub.i == substantivo.palavra.i and substantivo.palavra.depStanza_ == "nsubj":
 
                                     for verbo in token.verbos:
                                         if verbo.i != relacao.i:
