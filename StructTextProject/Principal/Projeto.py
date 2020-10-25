@@ -612,7 +612,7 @@ class Projeto:
         for sent in fraseStanford.sentences:
             for word in sent.words:
 
-                if sent.words[word.head - 1].text + sent.words[word.head - 1].id not in palavrasQueJaPassaram:
+                if sent.words[word.head - 1].text + str(sent.words[word.head - 1].id) not in palavrasQueJaPassaram:
 
                     palavra = Classes.TokenAux(sent.words[word.head - 1].text)
 
@@ -638,7 +638,7 @@ class Projeto:
 
                                 palavra.filhos.append(filhoAux2)
 
-                    palavrasQueJaPassaram.append(sent.words[word.head - 1].text + sent.words[word.head - 1].id)
+                    palavrasQueJaPassaram.append(sent.words[word.head - 1].text + str(sent.words[word.head - 1].id))
 
                     listaDePalavras.append(palavra)
 
@@ -906,8 +906,8 @@ class Projeto:
         for token in conhecimento:
 
             if token.palavra.pos_ == "N" or token.palavra.pos_ == "NPROP" or token.palavra.pos_ == "PROADJ" or token.palavra.pos_ == "PRO-KS" or token.palavra.pos_ == "PROPESS" or token.palavra.pos_ == "PRO-KS-REL" or token.palavra.pos_ == "PROSUB":
-                if token.palavra.text == "programa":
-                    print("oi")
+
+
                 for relacao in token.verbos:
 
                     if relacao.depStanza_ == "cop":
@@ -1206,14 +1206,14 @@ class Projeto:
             else:
                 outros.append(node[0])
 
-        nx.draw_networkx_nodes(G, pos, adverbios, node_color='purple', node_size=700, arrows=True)
-        nx.draw_networkx_nodes(G, pos, substantivos, node_color='y', node_size=700, arrows=True)
-        nx.draw_networkx_nodes(G, pos, verbos, node_color='red', node_size=500, arrows=True)
-        nx.draw_networkx_nodes(G, pos, cases, node_color='blue', node_size=350, arrows=True)
-        nx.draw_networkx_nodes(G, pos, adjetivos, node_color='pink', node_size=300, arrows=True)
-        nx.draw_networkx_nodes(G, pos, outros, node_color='green', node_size=200, arrows=True)
+        nx.draw_networkx_nodes(G, pos, adverbios, node_color='purple', node_size=700)
+        nx.draw_networkx_nodes(G, pos, substantivos, node_color='y', node_size=700)
+        nx.draw_networkx_nodes(G, pos, verbos, node_color='red', node_size=500)
+        nx.draw_networkx_nodes(G, pos, cases, node_color='blue', node_size=350)
+        nx.draw_networkx_nodes(G, pos, adjetivos, node_color='pink', node_size=300)
+        nx.draw_networkx_nodes(G, pos, outros, node_color='green', node_size=200)
         nx.draw_networkx_labels(G, pos, font_size=8)
-        nx.draw_networkx_edges(G, pos, edge_color='black', arrows=True)
+        nx.draw_networkx_edges(G, pos, edge_color='black')
 
         plt.axis('off')
         plt.show()

@@ -112,11 +112,11 @@ resposta4_P10 era para ter uma nota baixa
 
 
 
-#conhecimento1 = Projeto(respostaProfessor_P8)
+conhecimento1 = Projeto(respostaProfessor_P8)
 conhecimento2 = Projeto(resposta4_P8)
 
-#conhecimento1.ImprimirGrafo()
-#Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
+#conhecimento2.ImprimirConhecimento()
+Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
 
 #Comp.ImprimirConhecimento()
 #Comp.ImprimirGrafo()

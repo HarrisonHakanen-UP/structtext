@@ -21,8 +21,13 @@ class Comparacao:
     def __init__(self,con,con2):
         self.con = con
         self.con2 = con2
-        self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s100.txt', binary=False)
+        self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s300.txt', binary=False)
         self.Comparacao = self._CompararConhecimentos(self.con,self.con2)
+        self.semelhanca = 0
+
+
+    def getSemelhanca(self):
+        return self.semelhanca
 
     def most_similar(positive, negative, model):
         table_list_template = """
@@ -980,6 +985,7 @@ class Comparacao:
         else:
             Semelhanca = TotalOriginal * 100 / TotalCorretos
 
+        '''
         print("Original")
         print(TotalOriginal)
         print("\n\n")
@@ -988,9 +994,12 @@ class Comparacao:
         print("\n\n")
         print(len(ListaDeSubstantivosQueJaPassaramTeste))
         print("-------------------------")
+        '''
 
-        print(Semelhanca)
+        self.semelhanca = Semelhanca
 
+
+        '''
         print("Demais verbos que já passaram")
         print("Original ", len(ListaDeDemaisVerbosQueJaPassaram))
         print("Teste ", len(ListaDeDemaisVerbosQueJaPassaramTeste))
@@ -1015,7 +1024,7 @@ class Comparacao:
         print(len(SubstantivosPosterioresSemPrincipalCorretos))
         print("\n")
         print("-------------------------")
-
+        '''
         return listaDeVerbos
 
     def _AdicionarNosNoGrafo(self, conhecimento, G):
