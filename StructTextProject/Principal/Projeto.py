@@ -776,7 +776,7 @@ class Projeto:
 
         return conhecimento
 
-    def AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
+    def _AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
 
         ListaStanza = nlp(frase)
         Palavras_que_ja_passaram = []
@@ -906,7 +906,8 @@ class Projeto:
         for token in conhecimento:
 
             if token.palavra.pos_ == "N" or token.palavra.pos_ == "NPROP" or token.palavra.pos_ == "PROADJ" or token.palavra.pos_ == "PRO-KS" or token.palavra.pos_ == "PROPESS" or token.palavra.pos_ == "PRO-KS-REL" or token.palavra.pos_ == "PROSUB":
-
+                if token.palavra.text == "programa":
+                    print("oi")
                 for relacao in token.verbos:
 
                     if relacao.depStanza_ == "cop":
@@ -914,7 +915,7 @@ class Projeto:
                         for sub in token.substantivo:
                             for substantivo in conhecimento:
 
-                                if sub.i == substantivo.palavra.i and substantivo.palavra.depStanza_ == "nsubj":
+                                if sub.i == substantivo.palavra.i and (substantivo.palavra.depStanza_ == "nsubj" or substantivo.palavra.dep_ == "nsubj"):
 
                                     for verbo in token.verbos:
                                         if verbo.i != relacao.i:
@@ -926,6 +927,89 @@ class Projeto:
                                     for adj in token.adjetivos:
                                         substantivo.adjetivos.append(adj)
         return conhecimento
+
+    def AdicionarDependenciaDoStanza(self,ListaSpacy, frase):
+
+        ListaStanza = nlp(frase)
+        Palavras_que_ja_passaram = []
+        Controlar_id = 0
+        Continua = 0
+        TokensStanza = []
+        Frase = 0
+
+        for sentenceStanza in ListaStanza.sentences:
+
+            for tokenStanza in sentenceStanza.words:
+                if Frase == 0:
+                    Token = Classes.TokenAux(tokenStanza.text)
+                    Token.i = tokenStanza.id
+                    Token.depStanza_ = tokenStanza.deprel
+                    TokensStanza.append(Token)
+                else:
+                    Token = Classes.TokenAux(tokenStanza.text)
+                    Token.i = int(TokensStanza[-1].i) + 1
+                    Token.depStanza_ = tokenStanza.deprel
+                    TokensStanza.append(Token)
+            Frase += 1
+
+        indexSpacy = 0
+        while indexSpacy < len(ListaSpacy):
+
+            for tokenStanza in TokensStanza:
+
+                if tokenStanza.i not in Palavras_que_ja_passaram:
+
+                    if Continua == 1:
+
+                        if tokenStanza.text == ListaSpacy[indexSpacy + 1].text:
+                            indexSpacy += 1
+                            Continua = 0
+
+                    if tokenStanza.text == ListaSpacy[indexSpacy].text:
+
+                        ListaSpacy[indexSpacy].depStanza_ = tokenStanza.depStanza_
+                        Palavras_que_ja_passaram.append(tokenStanza.i)
+                        break
+
+                    else:
+                        Controlar_id += 1
+                        Continua = 1
+
+                        Palavras_que_ja_passaram.append(tokenStanza.i)
+                        break
+            if Continua == 0:
+                indexSpacy += 1
+            '''
+            for tokenSpacy in ListaSpacy:
+
+                for sentenceStanza in ListaStanza.sentences:
+
+                    for tokenStanza in sentenceStanza.words:
+
+                        if tokenStanza.id not in Palavras_que_ja_passaram:
+
+                            if tokenStanza.text == tokenSpacy.text:
+                                tokenSpacy.depStanza_ = tokenStanza.deprel
+                                Palavras_que_ja_passaram.append(tokenStanza.id)
+                                break
+
+                            else:
+                                Controlar_id += 1
+                                tokenStanza.id = tokenStanza.id - Controlar_id
+                                Palavras_que_ja_passaram.append(tokenStanza.id)
+
+            '''
+
+        for token in ListaSpacy:
+
+            for filho in token.filhos:
+
+                for tokenFilho in ListaSpacy:
+
+                    if filho.i == tokenFilho.i:
+                        filho.depStanza_ = tokenFilho.depStanza_
+
+        return ListaSpacy
 
     def _ConhecimentoCalibrado(self):
 
