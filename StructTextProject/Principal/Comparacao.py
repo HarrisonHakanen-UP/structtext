@@ -21,7 +21,7 @@ class Comparacao:
     def __init__(self,con,con2):
         self.con = con
         self.con2 = con2
-        self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s300.txt', binary=False)
+        self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s50.txt', binary=False)
         self.Comparacao = self._CompararConhecimentos(self.con,self.con2)
         self.semelhanca = 0
 
@@ -101,7 +101,7 @@ class Comparacao:
         db = mysql.connect(
             host="localhost",
             user="root",
-            password="Eunaosei1997",
+            password="password",
             database="WordNet_WordNetBr",
             auth_plugin='mysql_native_password'
         )

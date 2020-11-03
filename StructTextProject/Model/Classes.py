@@ -12,7 +12,7 @@ class Palavra:
 class VerboIgual:
 
     def __init__(self, _verbo):
-        self.verbo = _verbo
+        self.palavra = _verbo
         self.substantivoPrincipal = []
         self.substantivoPrincipal_naoEncontrado = []
         self.substantivo = []
