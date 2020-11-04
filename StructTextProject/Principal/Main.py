@@ -109,28 +109,17 @@ resposta4_P10 era para ter uma nota baixa
 '''
 
 
+def job():
 
 
+    conhecimento1 = Projeto(respostaProfessor_P8)
+    conhecimento2 = Projeto(resposta4_P8)
 
-conhecimento1 = Projeto(respostaProfessor_P8)
-conhecimento2 = Projeto(resposta4_P8)
+    #conhecimento2.ImprimirConhecimento()
+    #Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
 
-#conhecimento2.ImprimirConhecimento()
-Comp = Comparacao(conhecimento1.RetornarConhecimento(),conhecimento2.RetornarConhecimento())
+    #Comp.ImprimirConhecimento()
+    #Comp.ImprimirGrafo()
+    #projeto.ConhecimentoCalibrado()
 
-#Comp.ImprimirConhecimento()
-#Comp.ImprimirGrafo()
-#projeto.ConhecimentoCalibrado()
-
-#projeto.ImprimirGrafo()
-
-
-
-
-
-
-
-#frase3 não fazendo ligações corretas.
-#fraseTeste2 e f3 está duplicando colocando "Jeferson" como um não substantivo ou pronome...sei la pq
-#fraseTeste3 Maria e comprou aparecem como relações não catalogadas pelos grafos (deve ser algo quando se criam os nós do grafo)
-
+    #projeto.ImprimirGrafo()

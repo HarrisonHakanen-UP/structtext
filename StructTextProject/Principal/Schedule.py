@@ -1,9 +1,8 @@
+from Principal.Main import job
 import schedule
 
-def job():
-    print("teste")
-
-schedule.every(10).seconds.do(job)
+#schedule.every(10).seconds.do(job)
+schedule.every().day.at("00:00").do(job)
 
 
 while True:
