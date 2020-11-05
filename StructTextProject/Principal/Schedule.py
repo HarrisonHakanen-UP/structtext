@@ -1,8 +1,8 @@
-from Principal.Main import job
+from Principal.IniciandoAPartirDoBanco import CompararRespostasDasProvas
 import schedule
 
-#schedule.every(10).seconds.do(job)
-schedule.every().day.at("00:00").do(job)
+schedule.every(10).seconds.do(CompararRespostasDasProvas)
+#schedule.every().day.at("00:00").do(CompararRespostasDasProvas)
 
 
 while True:

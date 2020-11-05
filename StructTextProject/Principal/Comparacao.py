@@ -18,10 +18,11 @@ class Comparacao:
     # skip_gram_model = KeyedVectors.load_word2vec_format('skip_s50.txt',binary=False)
     # print("skip-gram pronto")
 
-    def __init__(self,con,con2):
+    def __init__(self,con,con2,model):
         self.con = con
         self.con2 = con2
-        self.cbow_model =KeyedVectors.load_word2vec_format('cbow_s50.txt', binary=False)
+
+        self.cbow_model = model
         self.Comparacao = self._CompararConhecimentos(self.con,self.con2)
         self.semelhanca = 0
 
