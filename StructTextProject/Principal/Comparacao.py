@@ -24,7 +24,7 @@ class Comparacao:
 
         self.cbow_model = model
         self.Comparacao = self._CompararConhecimentos(self.con,self.con2)
-        self.semelhanca = 0
+
 
 
     def getSemelhanca(self):
@@ -157,7 +157,7 @@ class Comparacao:
 
         achouVerbo = 0
 
-        for palavra in con:
+        for palavra in con.conhecimentoMaster:
 
             if palavra.palavra.pos_ == "V" or palavra.palavra.pos_ == "VAUX" or palavra.palavra.pos_ == "PCP" or palavra.palavra.pos_ == "VERB":
 
@@ -169,7 +169,7 @@ class Comparacao:
                 if len(palavra.substantivo) > 0:
                     ListaDeLigacoesCorretas.append(palavra)
 
-                for palavraFraseTeste in con2:
+                for palavraFraseTeste in con2.conhecimentoMaster:
 
                     if palavraFraseTeste.palavra.pos_ == "V" or palavraFraseTeste.palavra.pos_ == "VAUX" or palavraFraseTeste.palavra.pos_ == "PCP" or palavraFraseTeste.palavra.pos_ == "VERB":
 
@@ -281,12 +281,12 @@ class Comparacao:
 
                                                                 '''Verificar se existe e qual é o case do substantivo da frase principal.'''
 
-                                                                for pesquisando_substantivo in con:
+                                                                for pesquisando_substantivo in con.conhecimentoMaster:
                                                                     if pesquisando_substantivo.palavra.i == substantivoPrincipal_FrasePrincipal.i:
 
                                                                         for substantivoPosterior in pesquisando_substantivo.substantivo:
 
-                                                                            for pesquisando_substantivo_posterior in con:
+                                                                            for pesquisando_substantivo_posterior in con.conhecimentoMaster:
                                                                                 if pesquisando_substantivo_posterior.palavra.i == substantivoPosterior.i:
 
                                                                                     for relacao in pesquisando_substantivo_posterior.demaisRelacoes:
@@ -307,12 +307,12 @@ class Comparacao:
 
                                                                         '''Verificar se existe e qual é o case do substantivo da frase a ser testada.'''
 
-                                                                        for pesquisando_substantivo in con2:
+                                                                        for pesquisando_substantivo in con2.conhecimentoMaster:
                                                                             if pesquisando_substantivo.palavra.i == substantivo.i:
 
                                                                                 for substantivoPosterior in pesquisando_substantivo.substantivo:
 
-                                                                                    for pesquisando_substantivo_posterior in con2:
+                                                                                    for pesquisando_substantivo_posterior in con2.conhecimentoMaster:
                                                                                         if pesquisando_substantivo_posterior.palavra.i == substantivoPosterior.i:
 
                                                                                             for relacao in pesquisando_substantivo_posterior.demaisRelacoes:
@@ -611,7 +611,7 @@ class Comparacao:
 
                 ListaDeSubstantivosQueJaPassaram.append(palavra)
 
-                for palavraFraseTeste in con2:
+                for palavraFraseTeste in con2.conhecimentoMaster:
 
                     substantivosIguais = 0
                     if palavraFraseTeste.palavra.pos_ == "NPROP" or palavraFraseTeste.palavra.pos_ == "N" or palavraFraseTeste.palavra.pos_ == "PROADJ" or palavraFraseTeste.palavra.pos_ == "PRO-KS" or palavraFraseTeste.palavra.pos_ == "PROPESS" or palavraFraseTeste.palavra.pos_ == "PRO-KS-REL" or palavraFraseTeste.palavra.pos_ == "PROSUB" and palavraFraseTeste.palavra.dep_ != "case":
@@ -671,7 +671,7 @@ class Comparacao:
                                                         PrincipalNeg = 0
                                                         TesteNeg = 0
 
-                                                        for verboPrincipalPolaridade in con:
+                                                        for verboPrincipalPolaridade in con.conhecimentoMaster:
                                                             if VerboPrincipal_DemaisVerbos.palavra.i == verboPrincipalPolaridade.palavara.i:
 
                                                                 for relacao in verboPrincipalPolaridade.demaisRelacoes:
@@ -681,7 +681,7 @@ class Comparacao:
                                                                                 1] == "Neg":
                                                                                 PrincipalNeg = 1
 
-                                                        for verboTestePolaridade in con2:
+                                                        for verboTestePolaridade in con2.conhecimentoMaster:
                                                             if VerboTeste_DemaisVerbos.palavra.i == verboTestePolaridade.palavara.i:
 
                                                                 for relacao in verboTestePolaridade.demaisRelacoes:
@@ -747,7 +747,7 @@ class Comparacao:
                             listaDeVerbosPrincipal = []
                             listaDeVerbosTeste = []
 
-                            for verboUtilizado in con:
+                            for verboUtilizado in con.conhecimentoMaster:
 
                                 if verboUtilizado.palavra.pos_ == "V" or verboUtilizado.palavra.pos_ == "VAUX" or verboUtilizado.palavra.pos_ == "VERB":
 
@@ -756,7 +756,7 @@ class Comparacao:
                                         if verboUtilizado.substantivoPrincipal[0].i == palavra.palavra.i:
                                             listaDeVerbosPrincipal.append(verboUtilizado)
 
-                            for verboUtilizado in con2:
+                            for verboUtilizado in con2.conhecimentoMaster:
                                 if verboUtilizado.palavra.pos_ == "V" or verboUtilizado.palavra.pos_ == "VAUX" or verboUtilizado.palavra.pos_ == "VERB":
 
                                     if len(verboUtilizado.substantivoPrincipal) > 0:

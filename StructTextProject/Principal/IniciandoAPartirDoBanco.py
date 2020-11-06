@@ -6,7 +6,7 @@ def CompararRespostasDasProvas():
     db = mysql.connect(
         host="localhost",
         user="root",
-        password="Eunaosei1997",
+        password="password",
         database="db_testanalyser",
         auth_plugin='mysql_native_password'
     )

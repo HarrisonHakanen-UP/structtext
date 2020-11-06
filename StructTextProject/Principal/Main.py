@@ -13,12 +13,17 @@ class Main:
 
     def Iniciar(self):
 
-        conhecimento1 = Projeto(self.QuestaoProfessor.RespostaDiscursiva)
-        for questaoAluno in self.QuestaoProfessor.RespostasDosAlunos:
 
-            conhecimento2 = Projeto(questaoAluno.RespostaDiscursiva)
+        for questaoProfessor in self.QuestaoProfessor:
 
-            Comp = Comparacao(conhecimento1,conhecimento2,self.modelo)
+            conhecimento1 = Projeto(questaoProfessor.RespostaDiscursiva)
+            for questaoAluno in questaoProfessor.RespostasDosAlunos:
 
-            print(Comp.semelhanca)
+                conhecimento2 = Projeto(questaoAluno.RespostaDiscursiva)
+
+                Comp = Comparacao(conhecimento1,conhecimento2,self.modelo)
+
+
+                questaoAluno.NotaAluno = Comp.semelhanca
+
 

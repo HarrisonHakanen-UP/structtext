@@ -805,6 +805,8 @@ class Projeto:
 
             for tokenStanza in TokensStanza:
 
+
+
                 if tokenStanza.i not in Palavras_que_ja_passaram:
 
                     if Continua == 1:
@@ -826,6 +828,9 @@ class Projeto:
                         Palavras_que_ja_passaram.append(tokenStanza.i)
                         break
             if Continua == 0:
+                indexSpacy += 1
+
+            if len(Palavras_que_ja_passaram) == len(TokensStanza):
                 indexSpacy += 1
             '''
             for tokenSpacy in ListaSpacy:
