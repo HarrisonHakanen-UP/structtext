@@ -1,18 +1,13 @@
 '''WordEmbeddings'''
-from gensim.models import KeyedVectors
-from gensim.models import Word2Vec
-import sys
-from IPython.display import display, HTML
-from IPython.display import Image
+from IPython.display import HTML
 from jinja2 import Template
 import mysql.connector as mysql
 import math
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
-
 from Model import Classes
+
 
 class Comparacao:
     # skip_gram_model = KeyedVectors.load_word2vec_format('skip_s50.txt',binary=False)
@@ -99,13 +94,18 @@ class Comparacao:
         return listaDeSinonimos
 
     def _CompararConhecimentos(self,con, con2):
-        db = mysql.connect(
-            host="localhost",
-            user="root",
-            password="password",
-            database="WordNet_WordNetBr",
-            auth_plugin='mysql_native_password'
-        )
+        print("Carregando WordNet")
+
+        try:
+            db = mysql.connect(
+                host="localhost",
+                user="root",
+                password="250389",
+                database="WordNet_WordNetBr",
+                auth_plugin='mysql_native_password'
+            )
+        except:
+            print("erro ao iniciar wordNet")
 
         palavrasNaoEncontradas = []
 

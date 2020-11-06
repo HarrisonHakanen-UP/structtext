@@ -2,8 +2,6 @@
 import spacy
 import string
 
-from pyparsing import LineStart
-
 nlpPor = spacy.load("pt_core_news_lg")
 from Model import Classes
 import networkx as nx

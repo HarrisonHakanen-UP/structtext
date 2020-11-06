@@ -1,4 +1,4 @@
-from Principal.IniciandoAPartirDoBanco import CompararRespostasDasProvas
+from IniciandoAPartirDoBanco import CompararRespostasDasProvas
 import schedule
 
 schedule.every(10).seconds.do(CompararRespostasDasProvas)
