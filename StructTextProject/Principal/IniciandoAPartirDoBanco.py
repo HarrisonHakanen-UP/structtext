@@ -32,6 +32,8 @@ def CompararRespostasDasProvas():
 
         QuestoesProfessor.append(questao_professor)
 
+    db.close()
+
     Inicio = Main(QuestoesProfessor)
     Inicio.Iniciar()
 

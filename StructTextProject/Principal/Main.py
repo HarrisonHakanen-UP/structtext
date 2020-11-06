@@ -13,7 +13,6 @@ class Main:
 
     def Iniciar(self):
 
-
         for questaoProfessor in self.QuestaoProfessor:
 
             conhecimento1 = Projeto(questaoProfessor.RespostaDiscursiva)
@@ -22,8 +21,21 @@ class Main:
                 conhecimento2 = Projeto(questaoAluno.RespostaDiscursiva)
 
                 Comp = Comparacao(conhecimento1,conhecimento2,self.modelo)
-
-
                 questaoAluno.NotaAluno = Comp.semelhanca
+                db = mysql.connect(
+                    host="localhost",
+                    user="root",
+                    password="password",
+                    database="db_testanalyser",
+                    auth_plugin='mysql_native_password'
+                )
 
+                mycursor = db.cursor()
 
+                mycursor.execute("UPDATE db_testanalyser.respostasalunos SET NotaAluno = "+str(questaoAluno.NotaAluno)+" WHERE RespostasAlunoId ="+str(questaoAluno.RespostaAlunoId))
+
+                db.commit()
+
+                print(mycursor.rowcount, "record(s) affected")
+
+                db.close()
